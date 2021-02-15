@@ -1,4 +1,6 @@
-﻿namespace Minesweeper
+﻿using Minesweeper.MinefieldCreationStrategy;
+
+namespace Minesweeper
 {
    public class MineField
    {

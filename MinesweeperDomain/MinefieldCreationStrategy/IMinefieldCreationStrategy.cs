@@ -1,4 +1,4 @@
-﻿namespace Minesweeper
+﻿namespace Minesweeper.MinefieldCreationStrategy
 {
    public interface IMinefieldCreationStrategy
    {

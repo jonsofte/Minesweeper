@@ -8,6 +8,7 @@ namespace Minesweeper
       private readonly MineField _minefield;
       private readonly int _width;
       private readonly int _height;
+      private readonly Queue<(int x, int y)> fieldsToExplore;
       public Display[,] Display { get; }
 
       public DisplayField(MineField minefield)
@@ -16,12 +17,12 @@ namespace Minesweeper
          _height = minefield.Height;
          _minefield = minefield;
          Display = new Display[_width, _height];
+         fieldsToExplore = new Queue<(int x, int y)>();
       }
 
       public Display Explore(int x, int y)
       {
-         var fieldsToExplore = new Queue<(int x, int y)>();
-         AddToFieldsToExplore(x, y);
+         AddToExploreQueueIfValidPoint(x, y);
 
          while (fieldsToExplore.Count > 0)
          {
@@ -29,33 +30,34 @@ namespace Minesweeper
             Display[position.x, position.y] = ExploreSingleField(position);
             if (Display[position.x, position.y] == Minesweeper.Display.Empty)
             {
-               addNeighbouringFields(position.x,position.y);
+               AddNeighbouringFields(position.x,position.y);
             }
          }
 
          return ExploreSingleField((x, y));
 
-         void AddToFieldsToExplore(int x, int y)
-         {
-            if (x < 0 || y < 0 || x >= _width || y >= _height) return;
-            if (fieldsToExplore.Contains((x, y))) return;
-            if (Display[x, y] == Minesweeper.Display.Hidden) fieldsToExplore.Enqueue((x, y));
-         }
-
-         void addNeighbouringFields(int x, int y) 
-         {
-            AddToFieldsToExplore(x - 1, y - 1);
-            AddToFieldsToExplore(x - 1, y);
-            AddToFieldsToExplore(x - 1, y + 1);
-            AddToFieldsToExplore(x, y - 1);
-            AddToFieldsToExplore(x, y + 1);
-            AddToFieldsToExplore(x + 1, y - 1);
-            AddToFieldsToExplore(x + 1, y);
-            AddToFieldsToExplore(x + 1, y+1);
-         }
       }
 
-      public Display ExploreSingleField((int x, int y) field)
+      private void AddToExploreQueueIfValidPoint(int x, int y)
+      {
+         if (x < 0 || y < 0 || x >= _width || y >= _height) return;
+         if (fieldsToExplore.Contains((x, y))) return;
+         if (Display[x, y] == Minesweeper.Display.Hidden) fieldsToExplore.Enqueue((x, y));
+      }
+
+      private void AddNeighbouringFields(int x, int y)
+      {
+         AddToExploreQueueIfValidPoint(x - 1, y - 1);
+         AddToExploreQueueIfValidPoint(x - 1, y);
+         AddToExploreQueueIfValidPoint(x - 1, y + 1);
+         AddToExploreQueueIfValidPoint(x, y - 1);
+         AddToExploreQueueIfValidPoint(x, y + 1);
+         AddToExploreQueueIfValidPoint(x + 1, y - 1);
+         AddToExploreQueueIfValidPoint(x + 1, y);
+         AddToExploreQueueIfValidPoint(x + 1, y + 1);
+      }
+
+      private Display ExploreSingleField((int x, int y) field)
       {
          if (Display[field.x, field.y] == Minesweeper.Display.Hidden)
          {

@@ -1,4 +1,6 @@
 ﻿
+using Minesweeper.MinefieldCreationStrategy;
+
 namespace Minesweeper
 {   
    public class Game

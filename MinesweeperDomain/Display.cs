@@ -12,6 +12,6 @@
       Six,
       Seven,
       Eight,
-      Explosion
+      Explosion 
    }
 }

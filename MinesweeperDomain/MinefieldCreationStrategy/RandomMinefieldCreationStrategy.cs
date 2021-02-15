@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Minesweeper
+namespace Minesweeper.MinefieldCreationStrategy
 {
    class RandomMinefieldCreationStrategy : IMinefieldCreationStrategy
    {
