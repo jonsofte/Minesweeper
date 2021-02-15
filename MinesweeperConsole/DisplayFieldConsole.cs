@@ -1,5 +1,6 @@
-﻿using Mineweeper;
+﻿using Minesweeper;
 using System;
+using System.Linq;
 
 namespace MinesweeperConsole
 {
@@ -12,20 +13,39 @@ namespace MinesweeperConsole
          _display = display;
       }
 
-      public void printDisplay()
+      public void PrintDisplay()
       {
-         for (int y = 0; y < _display.GetLength(1); y++)
+         int yWidth = _display.GetLength(1);
+         int xWitdh = _display.GetLength(0);
+
+         Enumerable.Range(0, xWitdh.ToString().Length).ToList().ForEach(x => WriteLineForNumberPosition(xWitdh, x));
+
+         for (int y = 0; y < yWidth; y++)
          {
-            for (int x = 0; x < _display.GetLength(0); x++)
+            Console.Write("{0,3} ", y+1);
+            for (int x = 0; x < xWitdh; x++)
             {
                Console.Write(GetDisplay(_display[x, y]));
-
             }
             Console.Write('\n');
          }
       }
 
-      private char GetDisplay(Display display) => display switch
+      private static void WriteLineForNumberPosition(int width, int position)
+      {
+         Console.Write("    ");
+         Enumerable.Range(1, width).ToList().ForEach(x => Console.Write(GetValueInNumberPosition(x, position,width.ToString().Length)));
+         Console.WriteLine();
+      }
+
+      private static char GetValueInNumberPosition(int number, int position, int maxLength)
+      {
+         string value = number.ToString().PadLeft(maxLength);
+         if (position >= value.Length) return ' ';
+         return value[position];
+      }
+
+      private static char GetDisplay(Display display) => display switch
       {
          Display.Empty => ' ',
          Display.One => '1',
@@ -38,7 +58,7 @@ namespace MinesweeperConsole
          Display.Eight => '8',
          Display.Explosion => '*',
          Display.Hidden => '#',
-         _ => throw new ApplicationException("Invalid Display value")
+         _ => throw new ApplicationException("Invalid display value")
       };
    }
 }

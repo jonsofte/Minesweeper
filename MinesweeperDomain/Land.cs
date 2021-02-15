@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mineweeper
+namespace Minesweeper
 {
    public enum Land
    {

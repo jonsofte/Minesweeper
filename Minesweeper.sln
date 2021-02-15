@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinesweeperApi", "Minesweeper\MinesweeperApi.csproj", "{B6247669-9303-42A2-BBE3-DD0025B8A96C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinesweeperApi", "MinesweeperApi\MinesweeperApi.csproj", "{B6247669-9303-42A2-BBE3-DD0025B8A96C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mineweeper", "MineweeperDomain\Mineweeper.csproj", "{D95739EC-B587-4830-ABA8-381EBC32C90E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minesweeper", "MinesweeperDomain\Minesweeper.csproj", "{D95739EC-B587-4830-ABA8-381EBC32C90E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinesweeperConsole", "MinesweeperConsole\MinesweeperConsole.csproj", "{B6AE9482-0F44-433F-A92A-C7C5E77A33B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinesweeperConsole", "MinesweeperConsole\MinesweeperConsole.csproj", "{B6AE9482-0F44-433F-A92A-C7C5E77A33B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

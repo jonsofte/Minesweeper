@@ -1,22 +1,22 @@
-﻿namespace Mineweeper
+﻿namespace Minesweeper
 {
    public class MineField
    {
-      private readonly int _width;
-      private readonly int _height;
-      private readonly int _numberOfMines;
+      public int Width { get; }
+      public int Height { get; }
+      public int NumberOfMines { get; }
       private readonly IMinefieldCreationStrategy _creationStrategy;
       private readonly Land[,] minefield;
 
       public MineField(int width, int height, int numberOfMines, IMinefieldCreationStrategy creationStrategy)
       {
          // TODO Validate input
-         _width = width;
-         _height = height;
-         _numberOfMines = numberOfMines;
+         Width = width;
+         Height = height;
+         NumberOfMines = numberOfMines;
          _creationStrategy = creationStrategy;
 
-         minefield = _creationStrategy.CreateMinefield(_width, _height, _numberOfMines);
+         minefield = _creationStrategy.CreateMinefield(Width, Height, NumberOfMines);
       }
 
       public (bool exploded, int numberOfMines) ExploreLand(int x, int y)
@@ -27,7 +27,7 @@
 
       private int GetNumberOfNeighbouringMines(int x, int y)
       {
-         bool isValidPosition(int x, int y) => !(x < 0 || y < 0 || x >= _width || y >= _height);
+         bool isValidPosition(int x, int y) => !(x < 0 || y < 0 || x >= Width || y >= Height);
          bool isMine(int x, int y) => isValidPosition(x, y) && minefield[x, y] == Land.Mine;
 
          int numberOfMines = 0;
