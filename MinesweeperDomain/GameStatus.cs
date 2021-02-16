@@ -5,6 +5,7 @@
       Uninitialized,
       Active,
       EndedFailed,
-      EndedSuccess
+      EndedSuccess,
+      Aborted
    }
 }

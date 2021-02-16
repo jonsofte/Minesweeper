@@ -12,6 +12,7 @@
       Six,
       Seven,
       Eight,
-      Explosion 
+      Explosion,
+      Flagged
    }
 }

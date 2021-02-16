@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Minesweeper.MinefieldCreationStrategy
 {
-   class RandomMinefieldCreationStrategy : IMinefieldCreationStrategy
+   public class RandomMinefieldCreationStrategy : IMinefieldCreationStrategy
    {
       public Land[,] CreateMinefield(int width, int height, int numberOfMines)
       {

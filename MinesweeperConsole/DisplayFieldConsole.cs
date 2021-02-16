@@ -58,6 +58,7 @@ namespace MinesweeperConsole
          Display.Eight => '8',
          Display.Explosion => '*',
          Display.Hidden => '#',
+         Display.Flagged => 'F',
          _ => throw new ApplicationException("Invalid display value")
       };
    }

@@ -1,26 +1,52 @@
-﻿
-using Minesweeper.MinefieldCreationStrategy;
+﻿using Minesweeper.MinefieldCreationStrategy;
+using System;
 
 namespace Minesweeper
 {   
    public class Game
    {
-      public GameStatus gameStatus = GameStatus.Uninitialized;
+      private readonly IMinefieldCreationStrategy _minefieldCreationStrategy;
       private MineField minefield;
       private DisplayField display;
-      public Display[,] Display => display.Display;
+
+      public GameStatus GameStatus { get; private set; } 
+      public Display[,] Display => display.DisplayGrid;
+      public int NumberOfMoves;
+
+      public Game(IMinefieldCreationStrategy minefieldCreationStrategy)
+      {
+         _minefieldCreationStrategy = minefieldCreationStrategy;
+         GameStatus = GameStatus.Uninitialized;
+      }
 
       public void StartNewGame(int width, int height, int numberOfMines)
       {
-         minefield = new MineField(width, height, numberOfMines, new RandomMinefieldCreationStrategy());
+         minefield = new MineField(width, height, numberOfMines, _minefieldCreationStrategy);
          display = new DisplayField(minefield);
-         gameStatus = GameStatus.Active;
+         GameStatus = GameStatus.Active;
+         NumberOfMoves = 0;
       }
 
-      public void Explore(int x, int y)
+      public Display Explore(int x, int y)
       {
          Display result = display.Explore(x, y);
-         if (result == Minesweeper.Display.Explosion) gameStatus = GameStatus.EndedFailed;
+         NumberOfMoves++;
+         
+         if (result == Minesweeper.Display.Explosion) 
+            GameStatus = GameStatus.EndedFailed;
+         else if (display.AllMinesFoundOrFlagged() || display.AllMinesFlagged()) 
+            GameStatus = GameStatus.EndedSuccess;
+         return result;
       }
+
+      public void SetFlag(int x, int y)
+      {
+         display.SetFlag(x, y);
+         if (display.AllMinesFoundOrFlagged() || display.AllMinesFlagged())
+            GameStatus = GameStatus.EndedSuccess;
+      }
+      public int NumberOfFieldsExplored() => display.NumberOfFieldsExplored();
+      public void UnSetFlag(int x, int y) => display.UnSetFlag(x, y);
+      public void AbortGame() => GameStatus = GameStatus.Aborted;
    }
 }

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinesweeperConsole", "Mines
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Minesweeper.Test", "Minesweeper.Test", "{F0F425A9-9D71-4106-B9F9-ACE430B6A55F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinesweeperDomainTest", "MinesweeperDomainTest\MinesweeperDomainTest.csproj", "{D90F56ED-A3D2-4EF5-B3D6-C55F56C27C6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinesweeperTest", "MinesweeperDomainTest\MinesweeperTest.csproj", "{D90F56ED-A3D2-4EF5-B3D6-C55F56C27C6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

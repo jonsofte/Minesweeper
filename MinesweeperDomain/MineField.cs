@@ -1,4 +1,5 @@
 ﻿using Minesweeper.MinefieldCreationStrategy;
+using System;
 
 namespace Minesweeper
 {
@@ -26,6 +27,8 @@ namespace Minesweeper
          if (minefield[x, y] == Land.Mine) return (true,0);
          return (false, GetNumberOfNeighbouringMines(x, y));
       }
+
+      public bool IsMine(int x, int y) => minefield[x, y] == Land.Mine;
 
       private int GetNumberOfNeighbouringMines(int x, int y)
       {
