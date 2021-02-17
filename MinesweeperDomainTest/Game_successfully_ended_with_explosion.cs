@@ -4,7 +4,7 @@ using Minesweeper.MinefieldCreationStrategy;
 
 namespace MinesweeperTest
 {
-   public class Game_successfull_ended_with_explosion
+   public class Game_successfully_ended_with_explosion
    {
       readonly Game minesweeper = new Game(new EveryFifthFieldMinefieldCreationStrategy());
       readonly GameConfiguration configuration = new GameConfiguration() { Height = 10, Width = 10, NumberOfMines = 5 };
