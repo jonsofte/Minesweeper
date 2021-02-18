@@ -8,8 +8,15 @@ namespace Minesweeper
 {
    public class GameConfiguration
    {
-      public int Width { get; set; }
-      public int Height { get; set; }
-      public int NumberOfMines{ get; set; }
+      public GameConfiguration(int width, int height, int numberOfMines)
+      {
+         Width = width;
+         Height = height;
+         NumberOfMines = numberOfMines;
+      }
+
+      public int Width { get; private set; }
+      public int Height { get; private set; }
+      public int NumberOfMines{ get; private set; }
    }
 }

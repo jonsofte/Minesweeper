@@ -8,7 +8,7 @@ namespace MinesweeperTest
     public class Game_successfully_completed_without_flags
    {
       readonly Game minesweeper = new Game(new EveryFifthFieldMinefieldCreationStrategy());
-      readonly GameConfiguration configuration = new GameConfiguration() { Height = 10, Width = 10, NumberOfMines = 5 };
+      readonly GameConfiguration configuration = new GameConfiguration(10, 10, numberOfMines: 5);
 
       [Fact]
       public void Game_is_unintialized()

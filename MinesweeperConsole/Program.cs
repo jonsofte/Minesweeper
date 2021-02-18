@@ -15,7 +15,7 @@ namespace MinesweeperConsole
       {
          gameStatus = ConsoleGameStatus.Initialization;
          minesweeper = new Game(new RandomMinefieldCreationStrategy());
-         config = new GameConfiguration() { Width = 12, Height = 10, NumberOfMines = 8 };
+         config = new GameConfiguration(width: 12, height: 10, numberOfMines: 8);
          lastPointExplored = (0, 0);
 
          while (gameStatus != ConsoleGameStatus.Ended) { 
@@ -131,18 +131,12 @@ namespace MinesweeperConsole
 
       static void GetMinesweeperConfigurationFromInput()
       {
-         var gridWidthResult = InputFunctions.GetIntegerInput("Enter grid width:");
-         var gridHeightResult = InputFunctions.GetIntegerInput("Enter grid height:");
-         var numberOfMinesResult = InputFunctions.GetIntegerInput("Enter number of mines:");
-         if (gridHeightResult.Success && gridWidthResult.Success && numberOfMinesResult.Success)
-         {
-            config = new GameConfiguration()
-            {
-               Width = gridWidthResult.Value,
-               Height = gridHeightResult.Value,
-               NumberOfMines = numberOfMinesResult.Value
-            };
-         }
+         var width = InputFunctions.GetIntegerInput("Enter grid width:");
+         var height = InputFunctions.GetIntegerInput("Enter grid height:");
+         var numberOfMines = InputFunctions.GetIntegerInput("Enter number of mines:");
+       
+         if (height.Success && width.Success && numberOfMines.Success)
+            config = new GameConfiguration(width.Value, height.Value, numberOfMines.Value);
       }
 
       private static void ExploreRandom()
@@ -166,7 +160,7 @@ namespace MinesweeperConsole
       private static void PrintStatus()
       {
          Console.WriteLine($"Minefield: width: {config.Width} height: {config.Height} mines: {config.NumberOfMines}");
-         Console.WriteLine($"Number of moves: {minesweeper.NumberOfMoves} - " +
+         Console.WriteLine($"Number of moves: {minesweeper.NumberOfMoves} " +
             $"Fields explored: {minesweeper.NumberOfFieldsExplored}/{minesweeper.NumberOfFields} Flags used: {minesweeper.NumberOfFlagsUsed}" );
          Console.WriteLine($"Last point explored: { lastPointExplored.x},{ lastPointExplored.y}");
          Console.WriteLine($"Status: {GetGameStatusString(minesweeper.GameStatus)}");
