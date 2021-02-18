@@ -36,7 +36,7 @@ namespace MinesweeperConsole
 
       private static void Initialization()
       {
-         var input = InputFunctions.GetCharacterInput("Start new Game? (Y/N)");
+         var input = InputFunctions.GetCharacterInput("Start new game? (Y/N)");
          if (input.Success)
          {
             if (input.Value == 'y') gameStatus = ConsoleGameStatus.Configuration;
@@ -52,24 +52,16 @@ namespace MinesweeperConsole
          {
             if (input.Value == 'y')
             {
-               var gridWidthResult = InputFunctions.GetIntegerInput("Enter grid width:");
-               var gridHeightResult = InputFunctions.GetIntegerInput("Enter grid height:");
-               var numberOfMinesResult = InputFunctions.GetIntegerInput("Enter number of mines:");
-               if (gridHeightResult.Success && gridWidthResult.Success && numberOfMinesResult.Success)
-               {
-                  config = new GameConfiguration() { 
-                     Width = gridWidthResult.Value, 
-                     Height = gridHeightResult.Value, 
-                     NumberOfMines = numberOfMinesResult.Value 
-                  };
-               }
+               GetMinesweeperConfigurationFromInput();
                WriteCurrentConfiguration();
                gameStatus = ConsoleGameStatus.Active;
             }
             if (input.Value == 'n') gameStatus = ConsoleGameStatus.Active;
          }
 
-         static void WriteCurrentConfiguration() => Console.WriteLine($"Current Configuration: Width: {config.Width} Height: {config.Height} Number Of Mines: {config.NumberOfMines}");
+         static void WriteCurrentConfiguration() => 
+            Console.WriteLine($"Current configuration: Width: {config.Width} " +
+            $"Height: {config.Height} Number Of mines: {config.NumberOfMines}");
       }
 
       private static void RunGame()
@@ -96,7 +88,6 @@ namespace MinesweeperConsole
                      lastPointExplored = (result.Value.x + 1, result.Value.y + 1);
                      minesweeper.Explore(result.Value.x, result.Value.y);
                   }
-                  else Console.WriteLine("Invalid input");
                   break;
                case "f":
                   result = InputFunctions.GetPointFromInput();
@@ -105,7 +96,6 @@ namespace MinesweeperConsole
                      minesweeper.SetFlag(result.Value.x, result.Value.y);
                      lastPointExplored = (result.Value.x + 1, result.Value.y + 1);
                   }
-                  else Console.WriteLine("Invalid input");
                   break;
                case "u":
                   result = InputFunctions.GetPointFromInput();
@@ -114,7 +104,6 @@ namespace MinesweeperConsole
                      minesweeper.UnSetFlag(result.Value.x, result.Value.y);
                      lastPointExplored = (result.Value.x + 1, result.Value.y + 1);
                   }
-                  else Console.WriteLine("Invalid input");
                   break;
                case "q":
                   minesweeper.AbortGame();
@@ -124,10 +113,10 @@ namespace MinesweeperConsole
 
          WriteScreen(display);
          if (minesweeper.GameStatus == GameStatus.Aborted) 
-            EndMessage("Game Aborted");
+            EndMessage("Game aborted");
 
          if (minesweeper.GameStatus == GameStatus.EndedFailed) 
-            EndMessage($"Boom! Game Ended. Mine exploded at {lastPointExplored.x},{lastPointExplored.y}");
+            EndMessage($"Boom! Game ended. Mine exploded at {lastPointExplored.x},{lastPointExplored.y}");
 
          if (minesweeper.GameStatus == GameStatus.EndedSuccess) 
             EndMessage($"Congratulations! All mines found in {minesweeper.NumberOfMoves} moves. Game completed");
@@ -137,6 +126,22 @@ namespace MinesweeperConsole
             Console.WriteLine(message + " (Press Enter to continue)");
             Console.ReadLine();
             gameStatus = ConsoleGameStatus.Initialization;
+         }
+      }
+
+      static void GetMinesweeperConfigurationFromInput()
+      {
+         var gridWidthResult = InputFunctions.GetIntegerInput("Enter grid width:");
+         var gridHeightResult = InputFunctions.GetIntegerInput("Enter grid height:");
+         var numberOfMinesResult = InputFunctions.GetIntegerInput("Enter number of mines:");
+         if (gridHeightResult.Success && gridWidthResult.Success && numberOfMinesResult.Success)
+         {
+            config = new GameConfiguration()
+            {
+               Width = gridWidthResult.Value,
+               Height = gridHeightResult.Value,
+               NumberOfMines = numberOfMinesResult.Value
+            };
          }
       }
 
@@ -160,9 +165,21 @@ namespace MinesweeperConsole
 
       private static void PrintStatus()
       {
-         Console.WriteLine($"Minefield properties: width: {config.Width} height: {config.Height} mines: {config.NumberOfMines}");
-         Console.WriteLine($"Number Of Moves: {minesweeper.NumberOfMoves} Fields Explored: {minesweeper.NumberOfFieldsExplored} Flags used: {minesweeper.NumberOfFlagsUsed}" );
-         Console.WriteLine($"Status: {minesweeper.GameStatus} - Last Point Explored: {lastPointExplored.x},{lastPointExplored.y}");
+         Console.WriteLine($"Minefield: width: {config.Width} height: {config.Height} mines: {config.NumberOfMines}");
+         Console.WriteLine($"Number of moves: {minesweeper.NumberOfMoves} - " +
+            $"Fields explored: {minesweeper.NumberOfFieldsExplored}/{minesweeper.NumberOfFields} Flags used: {minesweeper.NumberOfFlagsUsed}" );
+         Console.WriteLine($"Last point explored: { lastPointExplored.x},{ lastPointExplored.y}");
+         Console.WriteLine($"Status: {GetGameStatusString(minesweeper.GameStatus)}");
       }
+
+      private static string GetGameStatusString(GameStatus status) => status switch
+      {
+         GameStatus.Active => "Active",
+         GameStatus.EndedFailed => "Game Over - Mine Exploded!",
+         GameStatus.EndedSuccess => "Game Completed! Congratulations!",
+         GameStatus.Aborted => "Game aborted",
+         GameStatus.Uninitialized => "Uninitialized",
+         _ => throw new ApplicationException("Invalid Game status")
+      };
    }
 }

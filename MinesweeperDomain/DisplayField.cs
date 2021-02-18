@@ -82,6 +82,8 @@ namespace Minesweeper
          return numberOfFields;
       }
 
+      public int NumberOfFields() => _width * _height;
+
       private void AddToExploreQueueIfValidPoint(int x, int y)
       {
          if (x < 0 || y < 0 || x >= _width || y >= _height) return;

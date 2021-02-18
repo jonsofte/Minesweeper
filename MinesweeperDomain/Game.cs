@@ -48,6 +48,7 @@ namespace Minesweeper
 
       public int NumberOfFieldsExplored => display.NumberOfFieldsExplored();
       public int NumberOfFlagsUsed => display.NumberOfFlagsUsed();
+      public int NumberOfFields => display.NumberOfFields();
       public void UnSetFlag(int x, int y) => display.UnSetFlag(x, y);
       public void AbortGame() => GameStatus = GameStatus.Aborted;
    }
