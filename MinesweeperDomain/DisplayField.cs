@@ -67,6 +67,12 @@ namespace Minesweeper
          return numberOfMatches == _minefield.NumberOfMines;
       }
 
+      public int NumberOfFlagsUsed()
+      {
+         var fieldSummary = CreateFieldSummary();
+         return fieldSummary.ContainsKey(Display.Flagged) ? fieldSummary[Display.Flagged] : 0;
+      }
+
       public int NumberOfFieldsExplored()
       {
          var summary = CreateFieldSummary();

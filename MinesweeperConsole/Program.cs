@@ -1,6 +1,5 @@
 ﻿using Minesweeper;
 using Minesweeper.MinefieldCreationStrategy;
-using Minesweeper.Tools;
 using System;
 
 namespace MinesweeperConsole
@@ -16,7 +15,7 @@ namespace MinesweeperConsole
       {
          gameStatus = ConsoleGameStatus.Initialization;
          minesweeper = new Game(new RandomMinefieldCreationStrategy());
-         config = new GameConfiguration() { Width = 10, Height = 10, NumberOfMines = 5 };
+         config = new GameConfiguration() { Width = 12, Height = 10, NumberOfMines = 8 };
          lastPointExplored = (0, 0);
 
          while (gameStatus != ConsoleGameStatus.Ended) { 
@@ -37,7 +36,7 @@ namespace MinesweeperConsole
 
       private static void Initialization()
       {
-         var input = GetCharacterInput("Start new Game? (Y/N)");
+         var input = InputFunctions.GetCharacterInput("Start new Game? (Y/N)");
          if (input.Success)
          {
             if (input.Value == 'y') gameStatus = ConsoleGameStatus.Configuration;
@@ -48,12 +47,22 @@ namespace MinesweeperConsole
       private static void Configuration()
       {          
          WriteCurrentConfiguration();
-         var input = GetCharacterInput("Change game configuration? (Y/N)");
+         var input = InputFunctions.GetCharacterInput("Change game configuration? (Y/N)");
          if (input.Success)
          {
             if (input.Value == 'y')
             {
-               // Todo - update configuration values
+               var gridWidthResult = InputFunctions.GetIntegerInput("Enter grid width:");
+               var gridHeightResult = InputFunctions.GetIntegerInput("Enter grid height:");
+               var numberOfMinesResult = InputFunctions.GetIntegerInput("Enter number of mines:");
+               if (gridHeightResult.Success && gridWidthResult.Success && numberOfMinesResult.Success)
+               {
+                  config = new GameConfiguration() { 
+                     Width = gridWidthResult.Value, 
+                     Height = gridHeightResult.Value, 
+                     NumberOfMines = numberOfMinesResult.Value 
+                  };
+               }
                WriteCurrentConfiguration();
                gameStatus = ConsoleGameStatus.Active;
             }
@@ -70,10 +79,9 @@ namespace MinesweeperConsole
 
          while (minesweeper.GameStatus == GameStatus.Active)
          {
-            Console.Clear();
-            PrintStatus();
-            display.PrintDisplay();
-            Console.WriteLine("Command: (R)andom (E)xplore (F)lagg (U)nflagg (Q)uit");
+            WriteScreen(display);
+
+            Console.WriteLine("Command: (R)andom (E)xplore (F)lag (U)nflag (Q)uit");
             string stringInput = Console.ReadLine().ToLower().Trim();
 
             switch (stringInput)
@@ -82,7 +90,7 @@ namespace MinesweeperConsole
                   ExploreRandom();
                   break;
                case "e":
-                  var result = GetPointFromInput();
+                  var result = InputFunctions.GetPointFromInput();
                   if (result.Success)
                   {
                      lastPointExplored = (result.Value.x + 1, result.Value.y + 1);
@@ -91,7 +99,7 @@ namespace MinesweeperConsole
                   else Console.WriteLine("Invalid input");
                   break;
                case "f":
-                  result = GetPointFromInput();
+                  result = InputFunctions.GetPointFromInput();
                   if (result.Success)
                   {
                      minesweeper.SetFlag(result.Value.x, result.Value.y);
@@ -100,7 +108,7 @@ namespace MinesweeperConsole
                   else Console.WriteLine("Invalid input");
                   break;
                case "u":
-                  result = GetPointFromInput();
+                  result = InputFunctions.GetPointFromInput();
                   if (result.Success)
                   {
                      minesweeper.UnSetFlag(result.Value.x, result.Value.y);
@@ -114,9 +122,15 @@ namespace MinesweeperConsole
             }
          }
 
-         if (minesweeper.GameStatus == GameStatus.EndedSuccess) EndMessage("Congratulations! Game complete");
-         if (minesweeper.GameStatus == GameStatus.EndedFailed) EndMessage("Boom! Game Ended");
-         if (minesweeper.GameStatus == GameStatus.Aborted) EndMessage("Game Aborted");
+         WriteScreen(display);
+         if (minesweeper.GameStatus == GameStatus.Aborted) 
+            EndMessage("Game Aborted");
+
+         if (minesweeper.GameStatus == GameStatus.EndedFailed) 
+            EndMessage($"Boom! Game Ended. Mine exploded at {lastPointExplored.x},{lastPointExplored.y}");
+
+         if (minesweeper.GameStatus == GameStatus.EndedSuccess) 
+            EndMessage($"Congratulations! All mines found in {minesweeper.NumberOfMoves} moves. Game completed");
 
          static void EndMessage(String message)
          {
@@ -134,39 +148,21 @@ namespace MinesweeperConsole
          lastPointExplored = (x + 1, y + 1);
       }
 
-      private static Result<(int x ,int y)> GetPointFromInput()
+      static void WriteScreen(DisplayFieldConsole display)
       {
-         try 
-         { 
-            Console.WriteLine("Enter coordinates: x,y");
-            string input = Console.ReadLine().Trim();
-            var values = input.Split(',',StringSplitOptions.TrimEntries);
-            return Result.Ok((Int32.Parse(values[0]) - 1, Int32.Parse(values[1]) - 1));
-         }
-         catch (Exception)
-         {
-            return Result.Fail<(int, int)>("Invalid Input");
-         }
-      }
-
-      private static Result<char> GetCharacterInput(string requestMessage)
-      {
-         try
-         {
-            Console.WriteLine(requestMessage);
-            char input = char.Parse(Console.ReadLine().Trim().ToLower());
-            return Result.Ok(input);
-         }
-         catch (Exception)
-         {
-            return Result.Fail<char>("Invalid Input");
-         }
+         Console.Clear();
+         Console.WriteLine("----------------------------------------------------------------");
+         PrintStatus();
+         Console.WriteLine("----------------------------------------------------------------");
+         display.PrintDisplay();
+         Console.WriteLine("----------------------------------------------------------------");
       }
 
       private static void PrintStatus()
       {
-         Console.WriteLine($"Number Of Moves: {minesweeper.NumberOfMoves} Fields Explored: {minesweeper.NumberOfFieldsExplored()} Status: {minesweeper.GameStatus} Last Point Explored: {lastPointExplored.x},{lastPointExplored.y}");
-         Console.WriteLine("-------------------------------------------------------------");
+         Console.WriteLine($"Minefield properties: width: {config.Width} height: {config.Height} mines: {config.NumberOfMines}");
+         Console.WriteLine($"Number Of Moves: {minesweeper.NumberOfMoves} Fields Explored: {minesweeper.NumberOfFieldsExplored} Flags used: {minesweeper.NumberOfFlagsUsed}" );
+         Console.WriteLine($"Status: {minesweeper.GameStatus} - Last Point Explored: {lastPointExplored.x},{lastPointExplored.y}");
       }
    }
 }

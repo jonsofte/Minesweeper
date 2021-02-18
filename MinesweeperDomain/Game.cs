@@ -45,7 +45,9 @@ namespace Minesweeper
          if (display.AllMinesFoundOrFlagged() || display.AllMinesFlagged())
             GameStatus = GameStatus.EndedSuccess;
       }
-      public int NumberOfFieldsExplored() => display.NumberOfFieldsExplored();
+
+      public int NumberOfFieldsExplored => display.NumberOfFieldsExplored();
+      public int NumberOfFlagsUsed => display.NumberOfFlagsUsed();
       public void UnSetFlag(int x, int y) => display.UnSetFlag(x, y);
       public void AbortGame() => GameStatus = GameStatus.Aborted;
    }

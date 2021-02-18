@@ -37,7 +37,8 @@ namespace MinesweeperTest
          minesweeper.SetFlag(0, 3);
          minesweeper.SetFlag(0, 4);
          Assert.Equal(GameStatus.EndedSuccess, minesweeper.GameStatus);
-         Assert.Equal(0, minesweeper.NumberOfFieldsExplored());
+         Assert.Equal(5, minesweeper.NumberOfFlagsUsed);
+         Assert.Equal(0, minesweeper.NumberOfFieldsExplored);
       }
    }
 }

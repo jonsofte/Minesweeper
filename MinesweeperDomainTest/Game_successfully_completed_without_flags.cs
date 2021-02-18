@@ -55,7 +55,7 @@ namespace MinesweeperTest
          minesweeper.Explore(1, 5);
          minesweeper.Explore(5, 5);
          Assert.Equal(GameStatus.EndedSuccess, minesweeper.GameStatus);
-         Assert.Equal(95, minesweeper.NumberOfFieldsExplored());
+         Assert.Equal(95, minesweeper.NumberOfFieldsExplored);
       }
    }
 }
