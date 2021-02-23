@@ -1,5 +1,6 @@
 ﻿using Minesweeper.MinefieldCreationStrategy;
-using System;
+using Minesweeper.Tools;
+using System.Collections.Generic;
 
 namespace Minesweeper
 {   
@@ -10,8 +11,15 @@ namespace Minesweeper
       private DisplayField display;
 
       public GameStatus GameStatus { get; private set; } 
+      public int NumberOfMoves { get; private set; }
+      public int NumberOfFieldsExplored => display.NumberOfFieldsExplored();
+      public int NumberOfFlagsUsed => display.NumberOfFlagsUsed();
+      public int NumberOfFields => display.NumberOfFields();
+      public int FieldWidth => minefield.Width;
+      public int FieldHeight => minefield.Height;
+      public int NumberOfMines => minefield.NumberOfMines;
       public Display[,] Display => display.DisplayGrid;
-      public int NumberOfMoves;
+      public List<int> GetDisplayAsList() => display.GetDisplayFieldsAsList();
 
       public Game(IMinefieldCreationStrategy minefieldCreationStrategy)
       {
@@ -19,16 +27,24 @@ namespace Minesweeper
          GameStatus = GameStatus.Uninitialized;
       }
 
-      public void StartNewGame(int width, int height, int numberOfMines)
+      public Result StartNewGame(GameConfiguration configuration)
       {
-         minefield = new MineField(width, height, numberOfMines, _minefieldCreationStrategy);
+         if (GameStatus != GameStatus.Uninitialized) return Result.Fail($"Can't start game. Status is {GameStatus}");
+         minefield = new MineField(configuration.Width,configuration.Height, configuration.NumberOfMines, _minefieldCreationStrategy);
          display = new DisplayField(minefield);
          GameStatus = GameStatus.Active;
          NumberOfMoves = 0;
+         return Result.Ok();
       }
 
-      public Display Explore(int x, int y)
+      public Result<Display> Explore(int x, int y)
       {
+         if (x < 0 || y < 0 || x >= FieldWidth || y >= FieldHeight) return Result.Fail<Display>("Invalid input");
+         if (GameStatus != GameStatus.Active) 
+            return Result.Fail<Display>($"Can't explore field. Game status is {GameStatus}");
+         if (display.DisplayGrid[x, y] != Minesweeper.Display.Hidden) 
+            return Result.Fail<Display>($"Can't explore field. Field is {display.DisplayGrid[x, y]}");
+
          Display result = display.Explore(x, y);
          NumberOfMoves++;
          
@@ -36,20 +52,40 @@ namespace Minesweeper
             GameStatus = GameStatus.EndedFailed;
          else if (display.AllMinesFoundOrFlagged() || display.AllMinesFlagged()) 
             GameStatus = GameStatus.EndedSuccess;
-         return result;
+         return Result.Ok<Display>(result);
       }
 
-      public void SetFlag(int x, int y)
+      public Result SetFlag(int x, int y)
       {
+         if (x < 0 || y < 0 || x >= FieldWidth || y >= FieldHeight) return Result.Fail("Invalid input");
+         if (GameStatus != GameStatus.Active)
+            return Result.Fail($"Can't set flag. Game status is {GameStatus}");
+         if (display.DisplayGrid[x, y] != Minesweeper.Display.Hidden)
+            return Result.Fail($"Can't set flag. Field is {display.DisplayGrid[x, y]}");
+
          display.SetFlag(x, y);
          if (display.AllMinesFoundOrFlagged() || display.AllMinesFlagged())
             GameStatus = GameStatus.EndedSuccess;
+
+         return Result.Ok();
       }
 
-      public int NumberOfFieldsExplored => display.NumberOfFieldsExplored();
-      public int NumberOfFlagsUsed => display.NumberOfFlagsUsed();
-      public int NumberOfFields => display.NumberOfFields();
-      public void UnSetFlag(int x, int y) => display.UnSetFlag(x, y);
-      public void AbortGame() => GameStatus = GameStatus.Aborted;
+      public Result UnSetFlag(int x, int y)
+      {
+         if (x < 0 || y < 0 || x >= FieldWidth || y >= FieldHeight) return Result.Fail("Invalid input");
+         if (GameStatus != GameStatus.Active)
+            return Result.Fail($"Can't unset flag. Game status is {GameStatus}");
+         if (display.DisplayGrid[x, y] != Minesweeper.Display.Flagged)
+            return Result.Fail($"Can't unset flag. Field is {display.DisplayGrid[x, y]}");
+
+         display.UnSetFlag(x, y);
+         return Result.Ok();
+      }
+      public Result AbortGame()
+      {
+         if (GameStatus != GameStatus.Active) return Result.Fail($"Can't abort game. Status is {GameStatus}");
+         GameStatus = GameStatus.Aborted;
+         return Result.Ok(); 
+      }
    }
 }

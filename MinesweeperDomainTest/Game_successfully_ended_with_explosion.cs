@@ -18,22 +18,22 @@ namespace MinesweeperTest
       [Fact]
       public void Staring_new_game_gives_status_active()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          Assert.Equal(GameStatus.Active, minesweeper.GameStatus);
       }
 
       [Fact]
       public void Exploring_field_with_bomb_causes_explosion()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          var result = minesweeper.Explore(0,3);
-         Assert.Equal(Display.Explosion, result);
+         Assert.Equal(Display.Explosion, result.Value);
       }
 
       [Fact]
       public void Explosion_causes_game_to_end()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          minesweeper.Explore(0, 3);
          Assert.Equal(GameStatus.EndedFailed, minesweeper.GameStatus);
       }

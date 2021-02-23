@@ -47,6 +47,17 @@ namespace Minesweeper
          if (DisplayGrid[x, y] == Display.Flagged) DisplayGrid[x, y] = Display.Hidden;
       }
 
+      public List<int> GetDisplayFieldsAsList()
+      {
+         var displayList = new List<int>();
+
+         for (int x = 0; x < DisplayGrid.GetLength(0); x++)
+            for (int y = 0; y < DisplayGrid.GetLength(1); y++)
+               displayList.Add((int)DisplayGrid[x, y]);
+
+         return displayList;
+      }
+
       public bool AllMinesFoundOrFlagged()
       {
          var summary = CreateFieldSummary();

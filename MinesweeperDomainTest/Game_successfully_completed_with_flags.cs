@@ -13,7 +13,7 @@ namespace MinesweeperTest
       [Fact]
       public void Setting_of_flag_is_correct()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          minesweeper.SetFlag(0, 4);
          Assert.Equal(Display.Flagged, minesweeper.Display[0,4]);
       }
@@ -21,7 +21,7 @@ namespace MinesweeperTest
       [Fact]
       public void Unsetting_of_flag_is_correct()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          minesweeper.SetFlag(0, 4);
          minesweeper.UnSetFlag(0, 4);
          Assert.Equal(Display.Hidden, minesweeper.Display[0, 4]);
@@ -30,7 +30,7 @@ namespace MinesweeperTest
       [Fact]
       public void Game_is_ended_successfully_when_all_flags_are_set()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          minesweeper.SetFlag(0, 0);
          minesweeper.SetFlag(0, 1);
          minesweeper.SetFlag(0, 2);

@@ -18,14 +18,14 @@ namespace MinesweeperTest
       [Fact]
       public void Staring_new_game_gives_status_active()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          Assert.Equal(GameStatus.Active, minesweeper.GameStatus);
       }
 
       [Fact]
       public void Ending_game_with_abort()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          minesweeper.AbortGame();
          Assert.Equal(GameStatus.Aborted, minesweeper.GameStatus);
       }

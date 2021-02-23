@@ -1,0 +1,40 @@
+
+@gameid = 677743d6-4d32-4420-b5d5-c27127e03b73
+
+###
+POST https://localhost:5001/game/newgame/ HTTP/1.1
+content-type: application/json
+
+{
+    "StartNewGame": true,
+    "width": 40,
+    "height": 30,
+    "numberOfMines": 40
+}
+
+###
+
+GET https://localhost:5001/game HTTP/1.1
+
+### 
+
+GET https://localhost:5001/game/{{gameid}}
+###
+
+POST https://localhost:5001/game/{{gameid}} HTTP/1.1
+content-type: application/json
+
+{
+    "ActionType": "explore",
+    "X": 29,
+    "Y": 39
+}
+
+###
+
+POST https://localhost:5001/game/{{gameid}} HTTP/1.1
+content-type: application/json
+
+{
+    "actionType": "quit"
+}

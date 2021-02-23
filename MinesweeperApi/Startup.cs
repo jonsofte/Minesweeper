@@ -1,48 +1,54 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MinesweeperApi.Service;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Converters;
 
 namespace Minesweeper
 {
    public class Startup
    {
-      public Startup(IConfiguration configuration)
-      {
-         Configuration = configuration;
-      }
+      public Startup(IConfiguration configuration) => Configuration = configuration;
 
       public IConfiguration Configuration { get; }
 
-      // This method gets called by the runtime. Use this method to add services to the container.
       public void ConfigureServices(IServiceCollection services)
       {
+         services
+            .AddControllers()
+            .AddNewtonsoftJson(
+               options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); }
+            );
 
-         services.AddControllers();
+         services.AddSingleton<GameService>();
+         services.AddSwaggerGen(c =>
+         {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Minesweeper API", Version = "v1" });
+         }).AddSwaggerGenNewtonsoftSupport();
       }
 
-      // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
       public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
       {
+
          if (env.IsDevelopment())
          {
             app.UseDeveloperExceptionPage();
          }
 
+         app.UseSwaggerUI(c =>
+         {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Minesweeper API v1");           
+         });
+
+         app.UseSwagger();
+
          app.UseHttpsRedirection();
-
          app.UseRouting();
-
          app.UseAuthorization();
-
          app.UseEndpoints(endpoints =>
          {
             endpoints.MapControllers();

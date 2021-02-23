@@ -19,7 +19,7 @@ namespace MinesweeperTest
       [Fact]
       public void Staring_new_game_gives_status_active()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          Assert.Equal(GameStatus.Active, minesweeper.GameStatus);
       }
 
@@ -30,15 +30,15 @@ namespace MinesweeperTest
       [InlineData(5, 5, Display.Empty)]
       public void Explore_fields_gives_correct_display_value(int x, int y, Display expected)
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          var result = minesweeper.Explore(x, y);
-         Assert.Equal(expected, result);
+         Assert.Equal(expected, result.Value);
       }
 
       [Fact]
        public void Correct_number_of_moves()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          minesweeper.Explore(1,0);
          minesweeper.Explore(1,1);
          minesweeper.Explore(1,5);
@@ -49,7 +49,7 @@ namespace MinesweeperTest
       [Fact]
       public void Game_is_ended_successfully()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          minesweeper.Explore(1, 0);
          minesweeper.Explore(1, 1);
          minesweeper.Explore(1, 5);
@@ -61,7 +61,7 @@ namespace MinesweeperTest
       [Fact]
       public void Total_number_of_fields_is_correct()
       {
-         minesweeper.StartNewGame(configuration.Width, configuration.Height, configuration.NumberOfMines);
+         minesweeper.StartNewGame(configuration);
          Assert.Equal(100, minesweeper.NumberOfFields);
       }
    }

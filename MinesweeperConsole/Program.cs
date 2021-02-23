@@ -6,10 +6,11 @@ namespace MinesweeperConsole
 {
    class Program
    {
-      static ConsoleGameStatus gameStatus;
-      static GameConfiguration config;
-      static Game minesweeper;
-      static (int x, int y) lastPointExplored;
+      private static ConsoleGameStatus gameStatus;
+      private static GameConfiguration config;
+      private static Game minesweeper;
+      private static(int x, int y) lastPointExplored;
+      private static string ErrorMessage = "";
 
       static void Main()
       {
@@ -66,12 +67,13 @@ namespace MinesweeperConsole
 
       private static void RunGame()
       {
-         minesweeper.StartNewGame(config.Width, config.Height, config.NumberOfMines);
+         minesweeper.StartNewGame(config);
          DisplayFieldConsole display = new DisplayFieldConsole(minesweeper.Display);
 
          while (minesweeper.GameStatus == GameStatus.Active)
          {
             WriteScreen(display);
+            ErrorMessage = "";
 
             Console.WriteLine("Command: (R)andom (E)xplore (F)lag (U)nflag (Q)uit");
             string stringInput = Console.ReadLine().ToLower().Trim();
@@ -86,27 +88,34 @@ namespace MinesweeperConsole
                   if (result.Success)
                   {
                      lastPointExplored = (result.Value.x + 1, result.Value.y + 1);
-                     minesweeper.Explore(result.Value.x, result.Value.y);
+                     var exploreResult = minesweeper.Explore(result.Value.x, result.Value.y);
+                     if (exploreResult.Failure) ErrorMessage = exploreResult.Error;
                   }
+                  else ErrorMessage = result.Error;
                   break;
                case "f":
                   result = InputFunctions.GetPointFromInput();
                   if (result.Success)
                   {
-                     minesweeper.SetFlag(result.Value.x, result.Value.y);
+                     var setFlagResult = minesweeper.SetFlag(result.Value.x, result.Value.y);
                      lastPointExplored = (result.Value.x + 1, result.Value.y + 1);
+                     if (setFlagResult.Failure) ErrorMessage = setFlagResult.Error;
                   }
+                  else ErrorMessage = result.Error;
                   break;
                case "u":
                   result = InputFunctions.GetPointFromInput();
                   if (result.Success)
                   {
-                     minesweeper.UnSetFlag(result.Value.x, result.Value.y);
+                     var unsetFlagResult = minesweeper.UnSetFlag(result.Value.x, result.Value.y);
                      lastPointExplored = (result.Value.x + 1, result.Value.y + 1);
+                     if (unsetFlagResult.Failure) ErrorMessage = unsetFlagResult.Error;
                   }
+                  else ErrorMessage = result.Error;
                   break;
                case "q":
-                  minesweeper.AbortGame();
+                  var abortResult = minesweeper.AbortGame();
+                  if (abortResult.Failure) ErrorMessage = abortResult.Error;
                   break;
             }
          }
@@ -143,7 +152,8 @@ namespace MinesweeperConsole
       {
          Random rand = new Random();
          var (x, y) = (rand.Next(config.Width - 1), rand.Next(config.Height - 1));
-         minesweeper.Explore(x, y);
+         var exploreResult = minesweeper.Explore(x, y);
+         if (exploreResult.Failure) ErrorMessage = exploreResult.Error;
          lastPointExplored = (x + 1, y + 1);
       }
 
@@ -164,6 +174,8 @@ namespace MinesweeperConsole
             $"Fields explored: {minesweeper.NumberOfFieldsExplored}/{minesweeper.NumberOfFields} Flags used: {minesweeper.NumberOfFlagsUsed}" );
          Console.WriteLine($"Last point explored: { lastPointExplored.x},{ lastPointExplored.y}");
          Console.WriteLine($"Status: {GetGameStatusString(minesweeper.GameStatus)}");
+         if (!String.IsNullOrEmpty(ErrorMessage))
+            Console.WriteLine(ErrorMessage);
       }
 
       private static string GetGameStatusString(GameStatus status) => status switch
