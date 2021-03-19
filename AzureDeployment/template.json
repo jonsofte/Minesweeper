@@ -1,6 +1,16 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_minesweepervue_name": {
+            "defaultValue": "minesweeper",
+            "type": "String"
+        },
+        "serverfarms_ASP_minesweepertest_819d_name": {
+            "defaultValue": "ASP-minesweeper",
+            "type": "String"
+        }
+    },
     "variables": {},
     "resources": [
         {

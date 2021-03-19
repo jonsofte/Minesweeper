@@ -20,6 +20,8 @@ The **MinesweeperAPI** is an ASP.Net WebAPI implementation that depends on the M
 
 New commits triggers the Github action in the **.github** folder that builds and tests the solution and builds the **Dockerfile** container image and posts it to Docker Hub. A webhook on Docker Hub initializes a new deloyment on Azure Web Apps, that updates the application container image.
 
+Container image on Docker hub: <https://hub.docker.com/r/jonsofteland/minesweeper>
+
 ## Minesweeper Console
 
 The **MinesweeperConsole** project is an implementation of a  Console front end that is using the Minesweeper Domain core functionaltiy. Example of the UI:
