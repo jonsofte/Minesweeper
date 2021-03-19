@@ -27,25 +27,25 @@ namespace MinesweeperApi
       public Result Explore(int x, int y)
       {
          var result = Game.Explore(x, y);
-         if (result.Success) AddGameMoveLog($"Explored field {x},{y}");
+         if (result.Success) AddEventToGameLog($"Explored field {x},{y}");
          return result;
       }
       public Result SetFlag(int x, int y)
       {
          var result = Game.SetFlag(x,y);
-         if (result.Success) AddGameMoveLog($"Set flag at field {x},{y}");
+         if (result.Success) AddEventToGameLog($"Set flag at field {x},{y}");
          return result;
       }
       public Result UnSetFlag(int x, int y)
       {
          var result = Game.UnSetFlag(x, y);
-         if (result.Success) AddGameMoveLog($"Unset flag at field {x},{y}");
+         if (result.Success) AddEventToGameLog($"Unset flag at field {x},{y}");
          return result;
       }
       public Result AbortGame()
       {
          var result = Game.AbortGame();
-         if (result.Success) AddGameMoveLog($"Game Aborted");
+         if (result.Success) AddEventToGameLog($"Game Aborted");
          return result;
       }
       
@@ -53,10 +53,10 @@ namespace MinesweeperApi
       {
          GameConfiguration configuration = new GameConfiguration(width, height, numberOfMines);
          Game.StartNewGame(configuration);
-         AddGameMoveLog($"Started new game with configuration: w:{width} h:{height} m:{numberOfMines}");
+         AddEventToGameLog($"Started new game with configuration: w:{width} h:{height} m:{numberOfMines}");
       }
 
-      private void AddGameMoveLog(string gameEvent)
+      private void AddEventToGameLog(string gameEvent)
       {
          GameMoves.Add((DateTimeOffset.Now, gameEvent));
       }

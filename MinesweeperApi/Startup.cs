@@ -19,6 +19,15 @@ namespace Minesweeper
       public void ConfigureServices(IServiceCollection services)
       {
          services
+            .AddCors(options =>
+            {
+               options.AddDefaultPolicy(
+                  builder =>
+                  {
+                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                  }
+               );
+            })
             .AddControllers()
             .AddNewtonsoftJson(
                options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); }
@@ -45,9 +54,11 @@ namespace Minesweeper
          });
 
          app.UseSwagger();
-
          app.UseHttpsRedirection();
+         app.UseDefaultFiles();
+         app.UseStaticFiles();
          app.UseRouting();
+         app.UseCors();
          app.UseAuthorization();
          app.UseEndpoints(endpoints =>
          {

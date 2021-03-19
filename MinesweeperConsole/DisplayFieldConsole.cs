@@ -59,6 +59,7 @@ namespace MinesweeperConsole
          Display.Explosion => '*',
          Display.Hidden => '#',
          Display.Flagged => 'F',
+         Display.DiscoveredMine => 'M',
          _ => throw new ApplicationException("Invalid display value")
       };
    }

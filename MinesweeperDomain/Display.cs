@@ -13,6 +13,7 @@
       Seven,
       Eight,
       Explosion,
-      Flagged
+      Flagged,
+      DiscoveredMine
    }
 }

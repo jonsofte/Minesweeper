@@ -1,12 +1,11 @@
 
-@gameid = 677743d6-4d32-4420-b5d5-c27127e03b73
+@gameid = 58a8978a-6f6d-47b4-a608-8018485e0b8f
 
 ###
 POST https://localhost:5001/game/newgame/ HTTP/1.1
 content-type: application/json
 
 {
-    "StartNewGame": true,
     "width": 40,
     "height": 30,
     "numberOfMines": 40
@@ -26,8 +25,8 @@ content-type: application/json
 
 {
     "ActionType": "explore",
-    "X": 29,
-    "Y": 39
+    "X": 10,
+    "Y": 10
 }
 
 ###

@@ -29,7 +29,7 @@ namespace Minesweeper
 
       public Result StartNewGame(GameConfiguration configuration)
       {
-         if (GameStatus != GameStatus.Uninitialized) return Result.Fail($"Can't start game. Status is {GameStatus}");
+         if (GameStatus == GameStatus.Active) return Result.Fail($"Can't start game. Status is {GameStatus}");
          minefield = new MineField(configuration.Width,configuration.Height, configuration.NumberOfMines, _minefieldCreationStrategy);
          display = new DisplayField(minefield);
          GameStatus = GameStatus.Active;
@@ -48,11 +48,23 @@ namespace Minesweeper
          Display result = display.Explore(x, y);
          NumberOfMoves++;
          
-         if (result == Minesweeper.Display.Explosion) 
+         if (result == Minesweeper.Display.Explosion)
+         {
+            display.RevealAllMines();
             GameStatus = GameStatus.EndedFailed;
-         else if (display.AllMinesFoundOrFlagged() || display.AllMinesFlagged()) 
-            GameStatus = GameStatus.EndedSuccess;
+         }
+         else EndGameIfCompleted();
+
          return Result.Ok<Display>(result);
+      }
+
+      private void EndGameIfCompleted()
+      {
+         if (display.AllMinesFoundOrFlagged() || display.AllMinesFlagged())
+         {
+            display.RevealNonFlaggedMinesAndEmptyFields();
+            GameStatus = GameStatus.EndedSuccess;
+         }
       }
 
       public Result SetFlag(int x, int y)
@@ -64,8 +76,7 @@ namespace Minesweeper
             return Result.Fail($"Can't set flag. Field is {display.DisplayGrid[x, y]}");
 
          display.SetFlag(x, y);
-         if (display.AllMinesFoundOrFlagged() || display.AllMinesFlagged())
-            GameStatus = GameStatus.EndedSuccess;
+         EndGameIfCompleted();
 
          return Result.Ok();
       }

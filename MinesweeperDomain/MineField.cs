@@ -1,4 +1,6 @@
 ﻿using Minesweeper.MinefieldCreationStrategy;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Minesweeper
 {
@@ -28,6 +30,19 @@ namespace Minesweeper
       }
 
       public bool IsMine(int x, int y) => minefield[x, y] == Land.Mine;
+
+      public IReadOnlyList<(int x, int y)> GetMinePositions()
+      {
+         var mines = new List<(int x, int y)>();
+         foreach (int x in Enumerable.Range(0,Width))
+         {
+            foreach (int y in Enumerable.Range(0, Height))
+            {
+               if (IsMine(x, y)) mines.Add((x, y));
+            }
+         }
+         return mines;
+      }
 
       private int GetNumberOfNeighbouringMines(int x, int y)
       {
