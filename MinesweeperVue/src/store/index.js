@@ -42,18 +42,15 @@ export default new Vuex.Store({
       context.commit('mutateGameConfiguration',configuration);
     },
     startNewGame(context) {
-      console.log('Starting new game');
-      // https://localhost:5001/game/newgame/
-      axios.post('/game/newgame/',this.state.gameConfiguration)
+      axios.post(process.env.VUE_APP_API_URL + 'game/newgame/',this.state.gameConfiguration)
         .then(
           (result) => {context.commit('setGameStatus',result.data) },
-          (response) => { console.log(response) },
+          // (response) => { },
           (error) => { console.log(error) }
         );
     },
     exploreField(context, input) {
-      console.log('Exploring field:', input.x , input.y);
-      axios.post('/game/' +this.state.gameStatus.gameID,
+      axios.post(process.env.VUE_APP_API_URL + 'game/' +this.state.gameStatus.gameID,
       {
         ActionType: "Explore",
         X: input.x,
@@ -61,13 +58,12 @@ export default new Vuex.Store({
       })
       .then(
         (result) => {context.commit('setGameStatus',result.data) },
-        (response) => { console.log(response) },
+        // (response) => { },
         (error) => { console.log(error) }
       );
     },
     flagField(context, input) {
-      console.log('Flagging field:', input.x , input.y);
-      axios.post('/game/' +this.state.gameStatus.gameID,
+      axios.post(process.env.VUE_APP_API_URL + 'game/' +this.state.gameStatus.gameID,
       {
         ActionType: "Flag",
         X: input.x,
@@ -75,13 +71,12 @@ export default new Vuex.Store({
       })
       .then(
         (result) => {context.commit('setGameStatus',result.data) },
-        (response) => { console.log(response) },
+        // (response) => { },
         (error) => { console.log(error) }
       );
     },
     unflagField(context, input) {
-      console.log('Unflagging field:', input.x , input.y);
-      axios.post('/game/' +this.state.gameStatus.gameID,
+      axios.post(process.env.VUE_APP_API_URL + 'game/' +this.state.gameStatus.gameID,
       {
         ActionType: "Unflag",
         X: input.x,
@@ -89,19 +84,18 @@ export default new Vuex.Store({
       })
       .then(
         (result) => {context.commit('setGameStatus',result.data) },
-        (response) => { console.log(response) },
+        // (response) => { },
         (error) => { console.log(error) }
       );
     },
     QuitGame(context) {
-      console.log('Aborting game');
-      axios.post('/game/' +this.state.gameStatus.gameID,
+      axios.post(process.env.VUE_APP_API_URL + 'game/' +this.state.gameStatus.gameID,
       {
         ActionType: "Quit",
       })
       .then(
         (result) => {context.commit('setGameStatus',result.data) },
-        (response) => { console.log(response) },
+        // (response) => { },
         (error) => { console.log(error) }
       );
     }

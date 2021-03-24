@@ -3,8 +3,9 @@
     <div class="app">
       <h1 class="text-h2 font-weight-bold text-center">Minesweeper</h1>
       <div v-if="displayConfiguration" class="mb-4">
-        <GameConfiguration @aborted="onConfigAbort" @gameStart="onGameStart"/></div>
-        <div v-if="displayMinefield" style="position: fixed">
+        <GameConfiguration @aborted="onConfigAbort" @gameStart="onGameStart"/>
+      </div>
+        <v-container v-if="displayMinefield" justify="center" align="center">
           <div v-for="y in height" :key="y-1">
             <Tile v-for="x in width" :key="x-1" 
               :tileValue="getTile(x,y)" 
@@ -15,7 +16,7 @@
               @unflagged="unflagField"
             />
           </div>
-      </div>
+      </v-container>
       <v-btn v-if="displayGameStartButton" @click="displayConfiguration = true" block>Start</v-btn>
     </div>
   </v-app>
@@ -63,7 +64,7 @@ export default {
       this.displayConfiguration = false;
       this.displayMinefield = true;
       this.$store.dispatch('setGameConfiguration', gameConfig)
-      console.log('Width:', gameConfig.width, "Height:", gameConfig.height, "NumberOfMines:", gameConfig.numberOfMines)
+      console.log('Starting new game: Width:', gameConfig.width, "Height:", gameConfig.height, "NumberOfMines:", gameConfig.numberOfMines)
       this.$store.dispatch('startNewGame')
     },
     exploreField(xValue ,yValue) {

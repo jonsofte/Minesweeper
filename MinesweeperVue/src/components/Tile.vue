@@ -47,16 +47,13 @@ export default {
             return this.tileStates[this.tileValue].flat ? 0 : 1;
         },
         explore() {
-            console.log('At tile:', this.xValue, this.yValue)
             this.$emit('explored', this.xValue, this.yValue)
         },
         toggleFlag(event) {
             if (this.tileStates[this.tileValue].state === "Hidden") {
-                console.log('flag', this.xValue, this.yValue)
                 this.$emit('flagged', this.xValue, this.yValue)
             }
             else if (this.tileStates[this.tileValue].state === "Flagged") {
-                console.log('unflag', this.xValue, this.yValue)
                 this.$emit('unflagged', this.xValue, this.yValue)
             }
             event.preventDefault()
