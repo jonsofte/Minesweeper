@@ -6,21 +6,16 @@ A simple implementation of the minesweeper game in .net 5 and vue
 
 **Hosted on <https://minesweepervue.azurewebsites.net/>**
 
-(Might take some seconds to start, due to the use of the Free App Service Plan)
+(Might take some seconds to start, due to the use of the Free App Service Plan)  
 
 ## Minesweeper Domain and Tests
 
-The **MinesweeperDomain** is the core minesweeper game implementation. The **MinesweeperDomainTest** project contains unit tests that verifies the core implementation.
+The **MinesweeperDomain** project contains the core minesweeper game implementation.
+The **MinesweeperDomainTest** project contains unit tests that verifies the core implementation.
 
 ## Minesweeper API & Minesweeper Vue
 
-The **MinesweeperAPI** is an ASP.Net WebAPI implementation that depends on the Minesweeper Core library to expose the game through a REST API. **MinesweeperVue** is the web front end that utilizes the backend REST API to display the game. The front end is implemented with Vue, Vuetify and Vuex.
-
-## CI/CD
-
-New commits triggers the Github action in the **.github** folder that builds and tests the solution and builds the **Dockerfile** container image and posts it to Docker Hub. A webhook on Docker Hub initializes a new deloyment on Azure Web Apps, that updates the application container image.
-
-Container image on Docker hub: <https://hub.docker.com/r/jonsofteland/minesweeper>
+The **MinesweeperAPI** is an ASP.Net WebAPI implementation that utilizes the Minesweeper Core library to expose the game through a REST API **MinesweeperVue** is the web front end that comunicates withe the REST API backend to display the game. The front end is implemented with Vue, Vuetify and Vuex.
 
 ## Minesweeper Console
 
@@ -51,3 +46,9 @@ The **MinesweeperConsole** project is an implementation of a  Console front end 
       15    1#1   1#1       12#####1           1#
       ----------------------------------------------------------------
       Command: (R)andom (E)xplore (F)lag (U)nflag (Q)uit
+
+## CI/CD
+
+New commits triggers the Github action in the **.github** folder that builds and tests the solution and builds the **Dockerfile** container image and posts it to Docker Hub. A webhook on Docker Hub initializes a new deloyment on Azure Web Apps, that updates the application container image.
+
+Container image on Docker hub: <https://hub.docker.com/r/jonsofteland/minesweeper>

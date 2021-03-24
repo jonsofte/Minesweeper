@@ -7,9 +7,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     gameConfiguration: {
-      width: 12,
-      height: 12,
-      numberOfMines: 20
+      width: 16,
+      height: 16,
+      numberOfMines: 30
     },
     gameStatus: {
       gameID: null,

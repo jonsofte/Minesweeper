@@ -1,5 +1,5 @@
 <template>
-    <v-btn tile :elevation="getHeight()" @click="explore" @click.right="toggleFlag" :color="tileStates[tileValue].color" class="nowrwap">
+    <v-btn tile :elevation="getHeight()" @click="explore" @click.right="toggleFlag" :color="tileStates[tileValue].color" small>
         <v-icon v-if="tileStates[tileValue].icon">{{tileStates[tileValue].value}}</v-icon>
         <div v-if="!tileStates[tileValue].icon">{{tileStates[tileValue].value}}</div>
     </v-btn>
