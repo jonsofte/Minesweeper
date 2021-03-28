@@ -35,6 +35,9 @@ export default new Vuex.Store({
     },
     setGameStatus: (state,game) => {
       state.gameStatus = game;
+    },
+    resetGameGridData: (state) => {
+      state.gameStatus.minefield.gridData = [];
     }
   },
   actions: {
@@ -88,16 +91,22 @@ export default new Vuex.Store({
         (error) => { console.log(error) }
       );
     },
-    QuitGame(context) {
+    quitGame(context) {
       axios.post(process.env.VUE_APP_API_URL + 'game/' +this.state.gameStatus.gameID,
       {
         ActionType: "Quit",
       })
       .then(
-        (result) => {context.commit('setGameStatus',result.data) },
+        (result) => {
+          context.commit('setGameStatus',result.data);
+          context.commit('resetGameGridData');
+        },
         // (response) => { },
         (error) => { console.log(error) }
       );
+    },
+    resetMinefield(context) {
+      context.commit('resetGameGridData');
     }
   },
   modules: {

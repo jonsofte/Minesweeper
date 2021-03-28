@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row >
-      <v-col justify="center" align="center">
+      <v-col justify="center" align="center">        
         <div v-for="y in height" :key="y-1">
           <Tile v-for="x in width" :key="x-1" 
               :tileValue="getTile(x,y)" 
@@ -12,6 +12,22 @@
               @unflagged="unflagField"
           />
         </div>
+      </v-col>
+    </v-row>
+    <v-row class="text-center font-weight-light mb-3">
+      <v-col>
+        Time used: <b>{{time}}</b> seconds. Number of moves: <b>{{numberOfMoves}}</b>. Flags used: <b>{{flagsUsed}}</b><br>
+        Fields explored: <b>{{fieldsExplored}}/{{numberOfTiles}}</b>. Mines: <b>{{numberOfMines}}</b>
+      </v-col>
+    </v-row>
+    <v-row align="center" justify="center" class="text-center font-weight-light mb-3">
+      <v-col lg=2 md=4 sm=6>
+        <v-btn @click="endGame" block>{{ButtonEndGameText}}</v-btn>
+      </v-col>
+    </v-row>
+    <v-row align="center" justify="center" class="text-center text-h5 mb-3">
+      <v-col lg=6 md=8 sm=12>
+        {{GameStatusMessage}}
       </v-col>
     </v-row>
   </v-container>
@@ -45,25 +61,43 @@ export default {
         {state: "Explosion",icon: true, value:"mdi-nuke", color:"red darken-2", flat:true},
         {state: "Flagged",icon: true, value:"mdi-flag-variant", color:"green lighten-4", flat:false},
         {state: "Mine",icon: true, value:"mdi-mine", color:"red lighten-3", flat:true}
-          ],
+      ],
+      time: 0,
+      interval: null
       }
   },
   methods: {
     exploreField(xValue ,yValue) {
-      console.log("Exploring:", xValue, yValue)
-      this.$store.dispatch('exploreField', { x: xValue, y: yValue })
+      if (this.interval == null) this.startTimer();
+      console.log("Exploring:", xValue, yValue);
+      this.$store.dispatch('exploreField', { x: xValue, y: yValue });
     },
     unflagField(xValue ,yValue) {
-      console.log("Unflag:", xValue, yValue)
-      this.$store.dispatch('unflagField', { x: xValue, y: yValue })
+      console.log("Unflag:", xValue, yValue);
+      this.$store.dispatch('unflagField', { x: xValue, y: yValue });
     },
     flagField(xValue ,yValue) {
-      console.log("Flag:", xValue, yValue)
-      this.$store.dispatch('flagField', { x: xValue, y: yValue })
+      console.log("Flag:", xValue, yValue);
+      this.$store.dispatch('flagField', { x: xValue, y: yValue });
     },
     getTile(x,y) {
       return this.$store.getters.getMinefield[((this.width*(y-1)+x)-1)];
-    }
+    },
+    endGame() {
+      this.stopTimer();
+      if (this.$store.getters.getGameStatus.gameStatus === "Active") this.$store.dispatch('quitGame');
+      this.$store.dispatch('resetMinefield');
+      this.$emit('gameEnded');
+    },
+    startTimer() {
+      this.interval = setInterval(this.incrementTime, 1000);
+    },
+    stopTimer() {
+      clearInterval(this.interval);
+    },
+    incrementTime() {
+      this.time = parseInt(this.time) + 1;
+    },
   },
   computed:  {
     width() {
@@ -72,8 +106,35 @@ export default {
     height() {
       return this.$store.getters.getGameConfiguration.height;
     },
+    numberOfMines() {
+      return this.$store.getters.getGameConfiguration.numberOfMines;
+    },
     numberOfTiles() {
       return this.width*this.height;
+    },
+    numberOfMoves() {
+      return this.$store.getters.getGameStatus.numberOfMoves;
+    },
+    fieldsExplored() {
+      return this.$store.getters.getGameStatus.numberOfFieldsExplored;
+    },
+    flagsUsed() {
+      return this.$store.getters.getGameStatus.numberOfFlagsUsed;
+    },
+    ButtonEndGameText() {
+      if (this.$store.getters.getGameStatus.gameStatus === "Active") return "Abort Game";
+      return "Main Menu";
+    },
+    GameStatusMessage() {
+      if (this.$store.getters.getGameStatus.gameStatus === "EndedSuccess") {
+        this.stopTimer();
+        return "Congratulations! Game completed in "+ this.time +" seconds with "+this.numberOfMoves+" moves";
+      }
+      if (this.$store.getters.getGameStatus.gameStatus === "EndedFailed") {
+        this.stopTimer();
+        return "BOOM! Game Over!";
+      }
+      return "";
     }
   }
 }

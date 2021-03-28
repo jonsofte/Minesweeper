@@ -2,8 +2,8 @@
   <v-app >
     <div class="app">
       <StartMenu v-if="displayStartMenu" @newGame="onNewGame" />
-      <GameConfiguration v-if="displayConfiguration" @aborted="onConfigAbort" @gameStart="onGameStart"/>
-      <Minefield v-if="displayMinefield" />
+      <GameConfiguration v-if="displayConfiguration" @aborted="onGotoStartMenu" @gameStart="onGameStart"/>
+      <Minefield v-if="displayMinefield" @gameEnded="onGotoStartMenu"/>
     </div>
   </v-app>
 </template>
@@ -36,9 +36,10 @@ export default {
       this.displayStartMenu = false;
       this.displayConfiguration = true;
     },
-    onConfigAbort() {
+    onGotoStartMenu() {
       this.displayConfiguration = false;
       this.displayStartMenu = true;
+      this.displayMinefield = false;
     },
     onGameStart(gameConfig) {
       this.displayConfiguration = false;
