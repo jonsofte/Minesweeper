@@ -36,8 +36,9 @@ export default new Vuex.Store({
     setGameStatus: (state,game) => {
       state.gameStatus = game;
     },
-    resetGameGridData: (state) => {
+    resetGame: (state) => {
       state.gameStatus.minefield.gridData = [];
+      state.gameStatus.gameStatus = "Uninitialized";
     }
   },
   actions: {
@@ -99,14 +100,14 @@ export default new Vuex.Store({
       .then(
         (result) => {
           context.commit('setGameStatus',result.data);
-          context.commit('resetGameGridData');
+          context.commit('resetGame');
         },
         // (response) => { },
         (error) => { console.log(error) }
       );
     },
     resetMinefield(context) {
-      context.commit('resetGameGridData');
+      context.commit('resetGame');
     }
   },
   modules: {

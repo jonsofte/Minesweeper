@@ -21,15 +21,18 @@
         </v-col>
       </v-row>
     </v-container>
-
+    <GameLog />
   </div>
 </template>
 
 <script>
-export default {
+import GameLog from './GameLog.vue';
 
+export default {
   name: 'StartMenu',
-  component: {},
+  components: {
+    GameLog,
+  },
   props: {},
   computed: {},
   watch: {},

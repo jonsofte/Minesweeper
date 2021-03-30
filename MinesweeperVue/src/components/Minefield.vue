@@ -98,6 +98,40 @@ export default {
     incrementTime() {
       this.time = parseInt(this.time) + 1;
     },
+    storeGameHistoryInLocalStorage() {
+      var previousGames = [];
+      if (localStorage.getItem('gameHistory')) {
+        try {
+          previousGames = JSON.parse(localStorage.getItem('gameHistory'));
+        } catch(e) {
+          localStorage.removeItem('gameHistory');
+        }
+      }
+      if (previousGames.length >= 10) previousGames.pop()
+      previousGames.unshift(
+        {
+          id: this.$store.getters.getGameStatus.gameID, 
+          result: this.getGameStatusText(this.$store.getters.getGameStatus.gameStatus), 
+          startTime: this.$store.getters.getGameStatus.gameStartedTime, 
+          secondsUsed: this.time, 
+          moves: this.numberOfMoves, 
+          flags: this.flagsUsed, 
+          minefield: 
+            {
+              width: this.width, 
+              height: this.height,
+              mines: this.numberOfMines
+            }  
+        }
+      );
+      const parsed = JSON.stringify(previousGames);
+      localStorage.setItem('gameHistory', parsed);
+    },
+    getGameStatusText(input) {
+      if (input == "EndedFailed") return "Failed";
+      if (input == "EndedSuccess") return "Completed";
+      return "";
+    }
   },
   computed:  {
     width() {
@@ -128,10 +162,12 @@ export default {
     GameStatusMessage() {
       if (this.$store.getters.getGameStatus.gameStatus === "EndedSuccess") {
         this.stopTimer();
+        this.storeGameHistoryInLocalStorage();
         return "Congratulations! Game completed in "+ this.time +" seconds with "+this.numberOfMoves+" moves";
       }
       if (this.$store.getters.getGameStatus.gameStatus === "EndedFailed") {
         this.stopTimer();
+        this.storeGameHistoryInLocalStorage();
         return "BOOM! Game Over!";
       }
       return "";
