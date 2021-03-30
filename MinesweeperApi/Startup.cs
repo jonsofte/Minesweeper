@@ -33,6 +33,7 @@ namespace Minesweeper
                options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); }
             );
 
+         services.AddHealthChecks();
          services.AddSingleton<GameService>();
          services.AddSwaggerGen(c =>
          {
@@ -63,6 +64,7 @@ namespace Minesweeper
          app.UseEndpoints(endpoints =>
          {
             endpoints.MapControllers();
+            endpoints.MapHealthChecks("/health");
          });
       }
    }
