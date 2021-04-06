@@ -65,7 +65,6 @@ namespace MinesweeperApi.Service
       {
          GameID = session.Guid.ToString(),
          GameStartedTime = session.GameStartedTime,
-         GameMoves = session.GameMoves.Select(x => new GameEvent() { Timestamp = x.Item1, Description = x.Item2 }).ToList(),
          GameStatus = session.Game.GameStatus.ToString(),
          NumberOfMoves = session.Game.NumberOfMoves,
          NumberOfFlagsUsed = session.Game.NumberOfFlagsUsed,
