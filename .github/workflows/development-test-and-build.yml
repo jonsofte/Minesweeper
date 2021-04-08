@@ -1,9 +1,9 @@
-name: development test and build
+name: Development branch - Test and build api and vue
 
 on:
   push:
     branches:
-    - develop
+    - development
     
 jobs:
   build-api:
@@ -23,6 +23,8 @@ jobs:
   build-vue:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Setup node
         uses: actions/setup-node@v2
       - name: Installing project dependencies
