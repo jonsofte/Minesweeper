@@ -83,10 +83,10 @@ namespace Minesweeper
       {
          var mines = _minefield.GetMinePositions();
 
-         foreach (var mine in mines)
+         foreach (var (x, y) in mines)
          {
-            if (DisplayGrid[mine.x, mine.y] != Display.Explosion)
-               DisplayGrid[mine.x, mine.y] = Display.DiscoveredMine;
+            if (DisplayGrid[x, y] != Display.Explosion)
+               DisplayGrid[x, y] = Display.DiscoveredMine;
          }
       }
 
