@@ -1,29 +1,34 @@
-﻿using Minesweeper;
+﻿using Microsoft.Extensions.Logging;
+using Minesweeper;
 using Minesweeper.Tools;
 using MinesweeperApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MinesweeperApi.Service
 {
    public class GameService
    {
       private readonly Dictionary<string, GameSession> _games;
+      private readonly ILogger<GameService> _logger;
       private readonly int _expireInHours = 5;
-      public GameService()
+      public GameService(ILogger<GameService> logger)
       {
+         _logger = logger;
          _games = new Dictionary<string, GameSession>();
+         _logger.LogInformation("Initializing Gameservice");
       }
 
       public Result<string> CreateNewGame(int width, int height, int numberOfMines)
       {
          RemoveExpiredGames();
-
          var game = new GameSession();
          game.StartGame(width, height, numberOfMines);
          _games.Add(game.Guid.ToString(), game);
+
+         _logger.LogInformation($"Starting new game: ({width}x{height} {numberOfMines} mines)");
+
          return Result.Ok<string>(game.Guid.ToString());
       }
 
@@ -90,7 +95,11 @@ namespace MinesweeperApi.Service
             x.Value.GameStartedTime < DateTime.Now.AddHours(-1 * _expireInHours))
          .Select(s => s.Key).ToList();
 
-         gamesToRemove.ForEach(x => _games.Remove(x));
+         if (gamesToRemove.Count > 0) 
+         { 
+            _logger.LogInformation($"Removing {gamesToRemove.Count} expired games");
+            gamesToRemove.ForEach(x => _games.Remove(x));
+         }
       }
    }
 }
