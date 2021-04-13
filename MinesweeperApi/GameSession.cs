@@ -1,11 +1,7 @@
 ﻿using Minesweeper;
-using Minesweeper.MinefieldCreationStrategy;
 using Minesweeper.Tools;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace MinesweeperApi
 {
@@ -16,11 +12,11 @@ namespace MinesweeperApi
       public Game Game { get; private set; }
       public List<(DateTimeOffset, string)> GameMoves { get; private set; }
 
-      public GameSession()
+      public GameSession(Game game)
       {
          Guid = System.Guid.NewGuid();
          GameStartedTime = DateTimeOffset.Now;
-         Game = new Game(new RandomMinefieldCreationStrategy());
+         Game = game;
          GameMoves = new List<(DateTimeOffset, string)>();
       }
 
