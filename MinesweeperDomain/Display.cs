@@ -14,6 +14,7 @@
       Eight,
       Explosion,
       Flagged,
-      DiscoveredMine
+      DiscoveredMine,
+      MisplacedFlag
    }
 }
