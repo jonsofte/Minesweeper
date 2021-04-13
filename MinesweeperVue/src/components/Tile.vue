@@ -38,7 +38,8 @@ export default {
                 {state: "Eight",icon: false, value:"8", color:"blue-grey lighten-4", flat:true},
                 {state: "Explosion",icon: true, value:"mdi-nuke", color:"red darken-2", flat:true},
                 {state: "Flagged",icon: true, value:"mdi-flag-variant", color:"green lighten-4", flat:false},
-                {state: "DiscoveredMine",icon: true, value:"mdi-mine", color:"grey lighten-2", flat:true}
+                {state: "DiscoveredMine",icon: true, value:"mdi-mine", color:"grey lighten-2", flat:true},
+                {state: "MisplacedFlag",icon: true, value:"mdi-flag-variant", color:"red lighten-2", flat:true}
             ]
         }
     },

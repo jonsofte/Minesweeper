@@ -50,6 +50,7 @@ namespace Minesweeper
          if (result == Minesweeper.Display.Explosion)
          {
             display.RevealAllMines();
+            display.ShowMisplacedFlags();
             GameStatus = GameStatus.EndedFailed;
          }
          else EndGameIfCompleted();

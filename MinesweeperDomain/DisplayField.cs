@@ -79,13 +79,22 @@ namespace Minesweeper
          return numberOfMatches == _minefield.NumberOfMines;
       }
 
+      internal void ShowMisplacedFlags()
+      {
+         for (int x = 0; x < DisplayGrid.GetLength(0); x++)
+            for (int y = 0; y < DisplayGrid.GetLength(1); y++)
+            { 
+               if (DisplayGrid[x, y] == Display.Flagged && !_minefield.IsMine(x, y))
+                  DisplayGrid[x, y] = Display.MisplacedFlag;
+            }
+      }
+
       public void RevealAllMines()
       {
          var mines = _minefield.GetMinePositions();
-
          foreach (var (x, y) in mines)
-         {
-            if (DisplayGrid[x, y] != Display.Explosion)
+         { 
+            if (DisplayGrid[x, y] != Display.Explosion) 
                DisplayGrid[x, y] = Display.DiscoveredMine;
          }
       }
@@ -110,7 +119,8 @@ namespace Minesweeper
       public int NumberOfFlagsUsed()
       {
          var displaySummary = NumberOfDisplayTypesInGrid();
-         return displaySummary.ContainsKey(Display.Flagged) ? displaySummary[Display.Flagged] : 0;
+         return (displaySummary.ContainsKey(Display.Flagged) ? displaySummary[Display.Flagged] : 0) +
+            (displaySummary.ContainsKey(Display.MisplacedFlag) ? displaySummary[Display.MisplacedFlag] : 0);
       }
 
       public int NumberOfFieldsExplored()
@@ -120,6 +130,7 @@ namespace Minesweeper
          if (summary.ContainsKey(Display.Hidden)) numberOfFields -= summary[Display.Hidden];
          if (summary.ContainsKey(Display.Flagged)) numberOfFields -= summary[Display.Flagged];
          if (summary.ContainsKey(Display.DiscoveredMine)) numberOfFields -= summary[Display.DiscoveredMine];
+         if (summary.ContainsKey(Display.MisplacedFlag)) numberOfFields -= summary[Display.MisplacedFlag];
          return numberOfFields;
       }
 
