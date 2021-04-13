@@ -7,7 +7,7 @@
       </v-row>
       <v-row align="center" justify="center">
         <v-col lg=1 md=1 sm=2 class="text-right">Width:</v-col>
-        <v-col lg=3 md=3 sm=8><v-slider max="50" min="0" v-model="config.width"/></v-col>
+        <v-col lg=3 md=3 sm=8><v-slider max="35" min="0" v-model="config.width"/></v-col>
         <v-col lg=1 md=1 sm=2>{{ config.width }}</v-col>
       </v-row>
       <v-row align="center" justify="center">

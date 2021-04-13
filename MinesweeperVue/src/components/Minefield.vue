@@ -16,7 +16,7 @@
     </v-row>
     <v-row class="text-center font-weight-light mb-3">
       <v-col>
-        Time used: <b>{{time}}</b> seconds. Number of moves: <b>{{numberOfMoves}}</b>. Flags used: <b>{{flagsUsed}}</b><br>
+        Time used: <b>{{time}}</b> seconds. Number of moves: <b>{{numberOfMoves}}</b>. Flags used: <b>{{flagsUsed}}/{{numberOfMines}}</b><br>
         Fields explored: <b>{{fieldsExplored}}/{{numberOfTiles}}</b>. Mines: <b>{{numberOfMines}}</b>
       </v-col>
     </v-row>
@@ -47,21 +47,6 @@ export default {
 
   data: function() {
     return {
-      tileStates: [
-        {state: "Hidden", icon: false, value:"", color:"", flat:false},
-        {state: "Empty", icon: false, value:"", color:"blue-grey lighten-4", flat:true},
-        {state: "One", icon: false, value:"1", color:"blue-grey lighten-4", flat:true},
-        {state: "Two", icon: false, value:"2", color:"blue-grey lighten-4", flat:true},
-        {state: "Three", icon: false, value:"3", color:"blue-grey lighten-4", flat:true},
-        {state: "Four",icon: false, value:"4", color:"blue-grey lighten-4", flat:true},
-        {state: "Five",icon: false, value:"5", color:"blue-grey lighten-4", flat:true},
-        {state: "Six",icon: false, value:"6", color:"blue-grey lighten-4", flat:true},
-        {state: "Seven",icon: false, value:"7", color:"blue-grey lighten-4", flat:true},
-        {state: "Eight",icon: false, value:"8", color:"blue-grey lighten-4", flat:true},
-        {state: "Explosion",icon: true, value:"mdi-nuke", color:"red darken-2", flat:true},
-        {state: "Flagged",icon: true, value:"mdi-flag-variant", color:"green lighten-4", flat:false},
-        {state: "Mine",icon: true, value:"mdi-mine", color:"red lighten-3", flat:true}
-      ],
       time: 0,
       interval: null
       }

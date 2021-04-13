@@ -9,7 +9,6 @@ namespace Minesweeper
       private readonly IMinefieldCreationStrategy _minefieldCreationStrategy;
       private MineField minefield;
       private DisplayField display;
-
       public GameStatus GameStatus { get; private set; } 
       public int NumberOfMoves { get; private set; }
       public int NumberOfFieldsExplored => display.NumberOfFieldsExplored();

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Minesweeper;
 using Minesweeper.Tools;
 using MinesweeperApi.Models;
@@ -10,12 +11,16 @@ namespace MinesweeperApi.Service
 {
    public class GameService
    {
-      private readonly Dictionary<string, GameSession> _games;
       private readonly ILogger<GameService> _logger;
-      private readonly int _expireInHours = 5;
-      public GameService(ILogger<GameService> logger)
+      private readonly GameSettingsOption _gameSettings;
+      private readonly Dictionary<string, GameSession> _games;
+      private readonly GameFactory _gameFactory;
+      public GameService(ILogger<GameService> logger, IConfiguration configuration)
       {
          _logger = logger;
+         _gameSettings = configuration.GetSection(GameSettingsOption.GameSettings).Get<GameSettingsOption>();
+
+         _gameFactory = new GameFactory();
          _games = new Dictionary<string, GameSession>();
          _logger.LogInformation("Initializing Gameservice");
       }
@@ -23,13 +28,13 @@ namespace MinesweeperApi.Service
       public Result<string> CreateNewGame(int width, int height, int numberOfMines)
       {
          RemoveExpiredGames();
-         var game = new GameSession();
-         game.StartGame(width, height, numberOfMines);
-         _games.Add(game.Guid.ToString(), game);
+         var gameSession = new GameSession(game: _gameFactory.CreateNewGame());
+         gameSession.StartGame(width, height, numberOfMines);
+         _games.Add(gameSession.Guid.ToString(), gameSession);
 
          _logger.LogInformation($"Starting new game: ({width}x{height} {numberOfMines} mines)");
 
-         return Result.Ok<string>(game.Guid.ToString());
+         return Result.Ok<string>(gameSession.Guid.ToString());
       }
 
       public List<Models.Minesweeper> GetCurrentGames() => _games.Select(x => x.Value).Select(MapToModel).ToList();
@@ -91,9 +96,9 @@ namespace MinesweeperApi.Service
       private void RemoveExpiredGames()
       {
          var gamesToRemove = _games.Where(x =>
-            x.Value.Game.GameStatus != GameStatus.Active &&
-            x.Value.GameStartedTime < DateTime.Now.AddHours(-1 * _expireInHours))
-         .Select(s => s.Key).ToList();
+            x.Value.Game.GameStatus != GameStatus.Active && 
+            x.Value.GameStartedTime < DateTime.Now.AddHours(-1 * _gameSettings.MinutesBeforeDeletingOldGames))
+            .Select(s => s.Key).ToList();
 
          if (gamesToRemove.Count > 0) 
          { 
