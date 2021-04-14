@@ -29,4 +29,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY --from=vuebuild /vueapp/dist ./wwwroot/
-ENTRYPOINT ["dotnet", "MinesweeperApi.dll"]
+
+CMD sed -i -e "s/{{ APPLICATION_INSIGHTS_KEY }}/$APPLICATION_INSIGHTS_KEY/g" /app/wwwroot/js/app.*.js && \
+dotnet MinesweeperApi.dll
