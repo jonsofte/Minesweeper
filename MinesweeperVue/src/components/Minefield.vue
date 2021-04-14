@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="minefieldTiles">
     <v-row >
       <v-col justify="center" align="center">        
         <div v-for="y in height" :key="y-1">
@@ -161,6 +161,24 @@ export default {
 }
 
 </script>
-
 <style>
+
+/*
+.minefieldTiles .bd:hover {
+  animation-name: boom;
+  animation-duration: 0.07s;
+  animation-iteration-count: 7;
+  animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes boom {
+  from { top: 0; left: 0; animation-timing-function: linear; }
+  20% { top: -3x; left: -10px; animation-timing-function: linear; }
+  40% { top: 2px; left: -10px; animation-timing-function: linear; }
+  60% { top: 2px; left: 10px; animation-timing-function: linear; }
+  80% { top: -2px; left: -10px; animation-timing-function: linear; }
+  to { top: 0; left: 0; animation-timing-function: linear; }
+}
+
+*/
 </style>
