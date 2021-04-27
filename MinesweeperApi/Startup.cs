@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using MinesweeperApi.Service;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
+using MediatR;
 
 namespace Minesweeper
 {
@@ -31,8 +32,8 @@ namespace Minesweeper
             .AddNewtonsoftJson(
                options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); }
             );
-
          services.AddHealthChecks();
+         services.AddMediatR(typeof(Startup));
          services.AddSingleton<GameService>();
          services.AddSwaggerGen(c =>
          {

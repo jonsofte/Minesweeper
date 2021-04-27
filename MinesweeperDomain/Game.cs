@@ -1,6 +1,8 @@
 ﻿using Minesweeper.MinefieldCreationStrategy;
 using Minesweeper.Tools;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Minesweeper
 {   
@@ -9,7 +11,7 @@ namespace Minesweeper
       private readonly IMinefieldCreationStrategy _minefieldCreationStrategy;
       private MineField minefield;
       private DisplayField display;
-      public GameStatus GameStatus { get; private set; } 
+      public GameStatus GameStatus { get; private set; }
       public int NumberOfMoves { get; private set; }
       public int NumberOfFieldsExplored => display.NumberOfFieldsExplored();
       public int NumberOfFlagsUsed => display.NumberOfFlagsUsed();
@@ -19,6 +21,10 @@ namespace Minesweeper
       public int NumberOfMines => minefield.NumberOfMines;
       public Display[,] Display => display.DisplayGrid;
       public List<int> GetDisplayAsList() => display.GetDisplayFieldsAsList();
+
+      public static Dictionary<int, string> GetDisplayEnumValues() =>
+         Enum.GetValues(typeof(Display)).Cast<Display>()
+            .ToDictionary(x => (int) x, x => x.ToString());
 
       public Game(IMinefieldCreationStrategy minefieldCreationStrategy)
       {

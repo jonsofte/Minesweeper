@@ -44,9 +44,8 @@ export default {
     onGameStart(gameConfig) {
       this.displayConfiguration = false;
       this.displayMinefield = true;
-      this.$store.dispatch('setGameConfiguration', gameConfig)
-      console.log('Starting new game: Width:', gameConfig.width, "Height:", gameConfig.height, "NumberOfMines:", gameConfig.numberOfMines)
-      this.$store.dispatch('startNewGame')
+      this.$store.dispatch('setGameConfiguration', gameConfig);
+      this.$store.dispatch('startNewGame');
     }
   },
   computed:  {

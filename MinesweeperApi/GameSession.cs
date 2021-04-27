@@ -11,6 +11,7 @@ namespace MinesweeperApi
       public DateTimeOffset GameStartedTime { get; private set; }
       public Game Game { get; private set; }
       public List<(DateTimeOffset, string)> GameMoves { get; private set; }
+      public bool IsActive => Game.GameStatus == GameStatus.Active;
 
       public GameSession(Game game)
       {

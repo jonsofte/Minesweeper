@@ -19,7 +19,6 @@ namespace MinesweeperApi.Service
       {
          _logger = logger;
          _gameSettings = configuration.GetSection(GameSettingsOption.GameSettings).Get<GameSettingsOption>();
-
          _gameFactory = new GameFactory();
          _games = new Dictionary<string, GameSession>();
          _logger.LogInformation("Initializing Gameservice");
@@ -27,26 +26,28 @@ namespace MinesweeperApi.Service
 
       public Result<string> CreateNewGame(int width, int height, int numberOfMines)
       {
-         RemoveExpiredGames();
+         RemoveOldGamesIfExpired();
+
          var gameSession = new GameSession(game: _gameFactory.CreateNewGame());
          gameSession.StartGame(width, height, numberOfMines);
          _games.Add(gameSession.Guid.ToString(), gameSession);
 
          _logger.LogInformation($"Starting new game: ({width}x{height} {numberOfMines} mines)");
-
          return Result.Ok<string>(gameSession.Guid.ToString());
       }
 
-      public List<Models.Minesweeper> GetCurrentGames() => _games.Select(x => x.Value).Select(MapToModel).ToList();
+      public List<Models.Minesweeper> GetCurrentGames() => 
+         _games.Select(x => x.Value).Select(MapToModel).ToList();
 
-      public Result<Models.Minesweeper> GetGame(string value) => _games.ContainsKey(value) ?
-         Result.Ok<Models.Minesweeper>(MapToModel(_games[value])) :
-         Result.Fail<Models.Minesweeper>("Invalid Game ID");
+      public Result<Models.Minesweeper> GetGame(string gameId) => 
+         _games.ContainsKey(gameId) ?
+            Result.Ok(MapToModel(_games[gameId])) :
+            Result.Fail<Models.Minesweeper>("Invalid Game ID");
 
-      public Result ExecuteAction(string gameid, GameActionRequest action)
+      public Result ExecuteAction(string gameId, GameActionRequest action)
       {
-         if (!_games.ContainsKey(gameid)) return Result.Fail("Invalid Game ID");
-         var gameSession = _games[gameid];
+         if (!_games.ContainsKey(gameId)) return Result.Fail("Invalid Game ID");
+         var gameSession = _games[gameId];
          switch (action.ActionType)
          {
             case Models.Action.Explore:
@@ -86,18 +87,16 @@ namespace MinesweeperApi.Service
             Height = session.Game.FieldHeight,
             GridData = session.Game.GetDisplayAsList(),
             NumberOfMines = session.Game.NumberOfMines,
-            FieldTypeValues = GetDisplayEnumValues()
+            FieldTypeValues = Game.GetDisplayEnumValues()
          }
       };
 
-      private static Dictionary<int, string> GetDisplayEnumValues() => 
-         Enum.GetValues(typeof(Display)).Cast<Display>().ToDictionary(x => (int)x, x => x.ToString());
-
-      private void RemoveExpiredGames()
+      private void RemoveOldGamesIfExpired()
       {
-         var gamesToRemove = _games.Where(x =>
-            x.Value.Game.GameStatus != GameStatus.Active && 
-            x.Value.GameStartedTime < DateTime.Now.AddHours(-1 * _gameSettings.MinutesBeforeDeletingOldGames))
+         var gamesToRemove = _games
+            .Where(x => 
+               !x.Value.IsActive && 
+               x.Value.GameStartedTime < DateTime.Now.AddHours(-1 * _gameSettings.MinutesBeforeDeletingOldGames))
             .Select(s => s.Key).ToList();
 
          if (gamesToRemove.Count > 0) 

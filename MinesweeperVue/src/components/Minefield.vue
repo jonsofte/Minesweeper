@@ -54,15 +54,12 @@ export default {
   methods: {
     exploreField(xValue ,yValue) {
       if (this.interval == null) this.startTimer();
-      console.log("Exploring:", xValue, yValue);
       this.$store.dispatch('exploreField', { x: xValue, y: yValue });
     },
     unflagField(xValue ,yValue) {
-      console.log("Unflag:", xValue, yValue);
       this.$store.dispatch('unflagField', { x: xValue, y: yValue });
     },
     flagField(xValue ,yValue) {
-      console.log("Flag:", xValue, yValue);
       this.$store.dispatch('flagField', { x: xValue, y: yValue });
     },
     getTile(x,y) {
