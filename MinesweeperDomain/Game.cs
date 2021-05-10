@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Minesweeper
-{   
+{
    public class Game
    {
       private readonly IMinefieldCreationStrategy _minefieldCreationStrategy;
@@ -24,7 +24,7 @@ namespace Minesweeper
 
       public static Dictionary<int, string> GetDisplayEnumValues() =>
          Enum.GetValues(typeof(Display)).Cast<Display>()
-            .ToDictionary(x => (int) x, x => x.ToString());
+            .ToDictionary(x => (int)x, x => x.ToString());
 
       public Game(IMinefieldCreationStrategy minefieldCreationStrategy)
       {
@@ -35,7 +35,7 @@ namespace Minesweeper
       public Result StartNewGame(GameConfiguration configuration)
       {
          if (GameStatus == GameStatus.Active) return Result.Fail($"Can't start game. Status is {GameStatus}");
-         minefield = new MineField(configuration.Width,configuration.Height, configuration.NumberOfMines, _minefieldCreationStrategy);
+         minefield = new MineField(configuration.Width, configuration.Height, configuration.NumberOfMines, _minefieldCreationStrategy);
          display = new DisplayField(minefield);
          GameStatus = GameStatus.Active;
          NumberOfMoves = 0;
@@ -45,14 +45,14 @@ namespace Minesweeper
       public Result<Display> Explore(int x, int y)
       {
          if (x < 0 || y < 0 || x >= FieldWidth || y >= FieldHeight) return Result.Fail<Display>("Invalid input");
-         if (GameStatus != GameStatus.Active) 
+         if (GameStatus != GameStatus.Active)
             return Result.Fail<Display>($"Can't explore field. Game status is {GameStatus}");
-         if (display.DisplayGrid[x, y] != Minesweeper.Display.Hidden) 
+         if (display.DisplayGrid[x, y] != Minesweeper.Display.Hidden)
             return Result.Fail<Display>($"Can't explore field. Field is {display.DisplayGrid[x, y]}");
 
          Display result = display.Explore(x, y);
          NumberOfMoves++;
-         
+
          if (result == Minesweeper.Display.Explosion)
          {
             display.RevealAllMines();
@@ -102,7 +102,7 @@ namespace Minesweeper
       {
          if (GameStatus != GameStatus.Active) return Result.Fail($"Can't abort game. Status is {GameStatus}");
          GameStatus = GameStatus.Aborted;
-         return Result.Ok(); 
+         return Result.Ok();
       }
    }
 }
