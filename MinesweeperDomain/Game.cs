@@ -26,7 +26,7 @@ namespace Minesweeper
          Enum.GetValues(typeof(Display)).Cast<Display>()
             .ToDictionary(x => (int)x, x => x.ToString());
 
-      public Game(IMinefieldCreationStrategy minefieldCreationStrategy)
+      internal Game(IMinefieldCreationStrategy minefieldCreationStrategy)
       {
          _minefieldCreationStrategy = minefieldCreationStrategy;
          GameStatus = GameStatus.Uninitialized;

@@ -1,21 +1,17 @@
 ﻿using Minesweeper.MinefieldCreationStrategy;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Minesweeper
 {
    public class GameFactory
    {
-      readonly IMinefieldCreationStrategy _strategy;
+      readonly IMinefieldCreationStrategy _createionStrategy;
 
-      public GameFactory()
+      public GameFactory(IMinefieldCreationStrategy createionStrategy)
       {
-         _strategy = new RandomMinefieldCreationStrategy();
+      _createionStrategy = createionStrategy;
       }
 
-      public Game CreateNewGame() => new Game(_strategy);
+      public Game CreateNewGame() => new Game(_createionStrategy);
    }
 }

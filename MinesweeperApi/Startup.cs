@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MinesweeperApi.Service;
+using Minesweeper.Domain;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using MediatR;
+using System.Collections.Generic;
+using MinesweeperApi;
 
 namespace Minesweeper
 {
@@ -18,6 +20,10 @@ namespace Minesweeper
 
       public void ConfigureServices(IServiceCollection services)
       {
+         services.AddMinefieldGame();
+         services.AddSingleton<IDictionary<string, GameSession>>(new Dictionary<string, GameSession>());
+         services.AddMediatR(typeof(Startup));
+
          services
             .AddCors(options =>
             {
@@ -33,8 +39,6 @@ namespace Minesweeper
                options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); }
             );
          services.AddHealthChecks();
-         services.AddMediatR(typeof(Startup));
-         services.AddSingleton<GameService>();
          services.AddSwaggerGen(c =>
          {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Minesweeper API", Version = "v1" });
