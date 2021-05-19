@@ -27,7 +27,8 @@ export default new Vuex.Store({
         gridData: [],
         fieldTypeValues: {}
       }
-    }
+    },
+    serverError: null,
   },
   mutations: {
     mutateGameConfiguration: (state, configuration) => {
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     resetGame: (state) => {
       state.gameStatus.minefield.gridData = [];
       state.gameStatus.gameStatus = "Uninitialized";
+    },
+    setError: (state, error) => {
+      state.serverError = error;
     }
   },
   actions: {
@@ -50,7 +54,7 @@ export default new Vuex.Store({
         .then(
           (result) => {context.commit('setGameStatus',result.data) },
           // (response) => { },
-          (error) => { console.log(error) }
+          (error) => { context.commit ('setError', error) }
         );
     },
     exploreField(context, input) {
@@ -63,7 +67,7 @@ export default new Vuex.Store({
       .then(
         (result) => {context.commit('setGameStatus',result.data) },
         // (response) => { },
-        (error) => { console.log(error) }
+        (error) => { context.commit ('setError', error) }
       );
     },
     flagField(context, input) {
@@ -76,7 +80,7 @@ export default new Vuex.Store({
       .then(
         (result) => {context.commit('setGameStatus',result.data) },
         // (response) => { },
-        (error) => { console.log(error) }
+        (error) => { context.commit ('setError', error) }
       );
     },
     unflagField(context, input) {
@@ -89,7 +93,7 @@ export default new Vuex.Store({
       .then(
         (result) => {context.commit('setGameStatus',result.data) },
         // (response) => { },
-        (error) => { console.log(error) }
+        (error) => { context.commit ('setError', error) }
       );
     },
     quitGame(context) {
@@ -103,7 +107,7 @@ export default new Vuex.Store({
           context.commit('resetGame');
         },
         // (response) => { },
-        (error) => { console.log(error) }
+        (error) => { context.commit ('setError', error) }
       );
     },
     resetMinefield(context) {
@@ -124,6 +128,9 @@ export default new Vuex.Store({
     },
     getMinefield: state => {
       return state.gameStatus.minefield.gridData
+    },
+    getError: state => {
+      return state.serverError
     }
   }
 })

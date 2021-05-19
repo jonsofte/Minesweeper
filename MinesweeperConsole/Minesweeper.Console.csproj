@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MinesweeperDomain\Minesweeper.csproj" />
+    <ProjectReference Include="..\MinesweeperDomain\Minesweeper.Domain.csproj" />
   </ItemGroup>
 
 </Project>

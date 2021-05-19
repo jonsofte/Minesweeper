@@ -7,20 +7,21 @@ namespace MinesweeperTest
 {
    public class Game_successfully_completed_with_flags
    {
-      readonly Game minesweeper = new Game(new EveryFifthFieldMinefieldCreationStrategy());
-      readonly GameConfiguration configuration = new GameConfiguration(10, 10, numberOfMines: 5);
-
       [Fact]
-      public void Setting_of_flag_is_correct()
+      public void Display_field_is_updated_when_flag_is_set()
       {
+         Game minesweeper = new Game(new EveryFifthFieldMinefieldCreationStrategy());
+         GameConfiguration configuration = new GameConfiguration(10, 10, numberOfMines: 5);
          minesweeper.StartNewGame(configuration);
          minesweeper.SetFlag(0, 4);
          Assert.Equal(Display.Flagged, minesweeper.Display[0,4]);
       }
 
       [Fact]
-      public void Unsetting_of_flag_is_correct()
+      public void Display_field_is_updated_when_flag_is_removed()
       {
+         Game minesweeper = new Game(new EveryFifthFieldMinefieldCreationStrategy());
+         GameConfiguration configuration = new GameConfiguration(10, 10, numberOfMines: 5);
          minesweeper.StartNewGame(configuration);
          minesweeper.SetFlag(0, 4);
          minesweeper.UnSetFlag(0, 4);
@@ -28,8 +29,10 @@ namespace MinesweeperTest
       }
 
       [Fact]
-      public void Game_is_ended_successfully_when_all_flags_are_set()
+      public void Game_is_completed_successfully_when_all_flags_are_set_correctly()
       {
+         Game minesweeper = new Game(new EveryFifthFieldMinefieldCreationStrategy());
+         GameConfiguration configuration = new GameConfiguration(10, 10, numberOfMines: 5);
          minesweeper.StartNewGame(configuration);
          minesweeper.SetFlag(0, 0);
          minesweeper.SetFlag(0, 1);
