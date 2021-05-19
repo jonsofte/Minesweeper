@@ -1,12 +1,23 @@
 
 using Xunit;
 using Minesweeper;
-using Minesweeper.MinefieldCreationStrategy;
+using Microsoft.Extensions.DependencyInjection;
+using Minesweeper.UnitTests;
 
 namespace MinesweeperTest
 {
     public class Game_successfully_completed_without_flags
    {
+      private readonly GameFactory _factory;
+
+      public Game_successfully_completed_without_flags()
+      {
+         ServiceCollection services = new ServiceCollection();
+         services.AddMinefieldGame();
+         _factory = (GameFactory)ActivatorUtilities.CreateInstance(services.BuildServiceProvider(), typeof(GameFactory));
+
+      }
+
       [Theory]
       [InlineData(1, 0, Display.Two)]
       [InlineData(1, 1, Display.Three)]
@@ -14,7 +25,7 @@ namespace MinesweeperTest
       [InlineData(5, 5, Display.Empty)]
       public void Explore_field_gives_correct_display_number_value(int x, int y, Display displayValueExpected)
       {
-         Game minesweeper = new Game(new EveryFifthFieldMinefieldCreationStrategy());
+         Game minesweeper = _factory.CreateNewGame();
          GameConfiguration configuration = new GameConfiguration(10, 10, numberOfMines: 5);
          minesweeper.StartNewGame(configuration);
          var result = minesweeper.Explore(x, y);
@@ -24,7 +35,7 @@ namespace MinesweeperTest
       [Fact]
        public void NumberOfMoves_value_is_updated_when_exploring()
       {
-         Game minesweeper = new Game(new EveryFifthFieldMinefieldCreationStrategy());
+         Game minesweeper = _factory.CreateNewGame();
          GameConfiguration configuration = new GameConfiguration(10, 10, numberOfMines: 5);
          minesweeper.StartNewGame(configuration);
          minesweeper.Explore(1,0);
@@ -37,7 +48,7 @@ namespace MinesweeperTest
       [Fact]
       public void Game_is_completed_successfully_when_all_none_mine_fields_are_explored()
       {
-         Game minesweeper = new Game(new EveryFifthFieldMinefieldCreationStrategy());
+         Game minesweeper = _factory.CreateNewGame();
          GameConfiguration configuration = new GameConfiguration(10, 10, numberOfMines: 5);
          minesweeper.StartNewGame(configuration);
          minesweeper.Explore(1, 0);
@@ -51,7 +62,7 @@ namespace MinesweeperTest
       [Fact]
       public void NumberOfFields_value_matches_game_configuration_setup()
       {
-         Game minesweeper = new Game(new EveryFifthFieldMinefieldCreationStrategy());
+         Game minesweeper = _factory.CreateNewGame();
          GameConfiguration configuration = new GameConfiguration(10, 10, numberOfMines: 5);
          minesweeper.StartNewGame(configuration);
          Assert.Equal(100, minesweeper.NumberOfFields);

@@ -7,14 +7,14 @@ EXPOSE 443
 # Build API backend
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["MinesweeperApi/MinesweeperApi.csproj", "MinesweeperApi/"]
-RUN dotnet restore "MinesweeperApi/MinesweeperApi.csproj"
+COPY ["MinesweeperApi/Minesweeper.Api.csproj", "MinesweeperApi/"]
+RUN dotnet restore "MinesweeperApi/Minesweeper.Api.csproj"
 COPY . .
 WORKDIR "/src/MinesweeperApi"
-RUN dotnet build "MinesweeperApi.csproj" -c Release -o /app/build
+RUN dotnet build "Minesweeper.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "MinesweeperApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "Minesweeper.Api.csproj" -c Release -o /app/publish
 
 # Build vue app - frontend
 FROM node:lts-alpine AS vuebuild

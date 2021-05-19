@@ -1,5 +1,6 @@
 ﻿using Minesweeper;
 using Minesweeper.Tools;
+using MinesweeperApi.Models;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +16,7 @@ namespace MinesweeperApi
 
       public GameSession(Game game)
       {
-         Guid = System.Guid.NewGuid();
+         Guid = Guid.NewGuid();
          GameStartedTime = DateTimeOffset.Now;
          Game = game;
          GameMoves = new List<(DateTimeOffset, string)>();
@@ -57,5 +58,24 @@ namespace MinesweeperApi
       {
          GameMoves.Add((DateTimeOffset.Now, gameEvent));
       }
+
+      public Models.Minesweeper MapToModel() => new Models.Minesweeper()
+      {
+         GameID = Guid.ToString(),
+         GameStartedTime = GameStartedTime,
+         GameStatus = Game.GameStatus.ToString(),
+         NumberOfMoves = Game.NumberOfMoves,
+         NumberOfFlagsUsed = Game.NumberOfFlagsUsed,
+         NumberOfFieldsExplored = Game.NumberOfFieldsExplored,
+         Minefield = new Minefield()
+         {
+            NumberOfFields = Game.NumberOfFields,
+            Width = Game.FieldWidth,
+            Height = Game.FieldHeight,
+            GridData = Game.GetDisplayAsList(),
+            NumberOfMines = Game.NumberOfMines,
+            FieldTypeValues = Game.GetDisplayEnumValues()
+         }
+      };
    }
 }
