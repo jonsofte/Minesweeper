@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MinesweeperDomain\Minesweeper.Domain.csproj" />
+    <ProjectReference Include="..\..\src\MinesweeperDomain\Minesweeper.Domain.csproj" />
   </ItemGroup>
 
 </Project>
