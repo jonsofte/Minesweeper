@@ -6,11 +6,11 @@ EXPOSE 443
 
 # Build .Net API - Backend
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
-WORKDIR /src
-COPY ["src/MinesweeperApi/Minesweeper.Api.csproj", "MinesweeperApi/"]
-RUN dotnet restore "src/MinesweeperApi/Minesweeper.Api.csproj"
-COPY . .
-WORKDIR "/src/MinesweeperApi"
+WORKDIR /backend
+COPY "src/MinesweeperApi/Minesweeper.Api.csproj" "MinesweeperApi/"
+RUN dotnet restore "MinesweeperApi/Minesweeper.Api.csproj"
+COPY src .
+WORKDIR "/backend/MinesweeperApi"
 RUN dotnet build "Minesweeper.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
