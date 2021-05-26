@@ -8,17 +8,20 @@ on:
 jobs:
   build-api:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
     steps:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1.8.0
     - name: Install dependencies
-      run: dotnet restore src/
+      run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore src/
+      run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal src/
+      run: dotnet test --no-restore --verbosity normal
   
   build-vue:
     runs-on: ubuntu-latest
