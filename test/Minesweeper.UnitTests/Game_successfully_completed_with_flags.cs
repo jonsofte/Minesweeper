@@ -13,7 +13,7 @@ namespace MinesweeperTest
       public Game_successfully_completed_with_flags()
       {
          ServiceCollection services = new ServiceCollection();
-         services.AddMinefieldGame();
+         services.AddMinefieldTestGame();
          _factory = (GameFactory)ActivatorUtilities.CreateInstance(services.BuildServiceProvider(), typeof(GameFactory));
 
       }

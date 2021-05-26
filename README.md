@@ -2,24 +2,34 @@
 
 ![dotnet package](https://github.com/jonsofte/Minesweeper/workflows/dotnet%20package/badge.svg?branch=master)
 
-A simple implementation of the minesweeper game in .net 5 and vue
+Minesweeper game implemented in .net 5 and Vue
 
-**Hosted on <https://minesweepervue.azurewebsites.net/>**
+The game is hosted on <https://minesweepervue.azurewebsites.net/>
 
-(Might take some seconds to start, due to the use of the Free App Service Plan)  
+Container image on Dockerhub: <https://hub.docker.com/r/jonsofteland/minesweeper>
 
-## Minesweeper Domain and Tests
+## Project structure and files
 
-The **MinesweeperDomain** project contains the core minesweeper game implementation.
-The **MinesweeperDomainTest** project contains unit tests that verifies the core implementation.
+- **src/MinesweeperDomain**: Implementation of the core functionality of the game.
+- **src/MinesweeperApi**: Rest API backend that handles game sessions.
+- **src/MinesweeperConsole**: Application that is using the domain game functionality and handles the user interaction via console.
+- **src/MinesweeperVue**: Vue/Vuetify frontend application that uses the backend API to play the game.
+- **test/MinesweeperDomainTest** Unit tests that verifies the core implementation game logic in the domain project.
+- **Dockerfile**: Builds a container image that contains both the backend api and the frontend application.
+- **deployment/template.json** ARM template file for deployment to Azure.
 
 ## Minesweeper API & Minesweeper Vue
 
-The **MinesweeperAPI** is an ASP.Net WebAPI implementation that utilizes the Minesweeper Core library to expose the game through a REST API **MinesweeperVue** is the web front end that comunicates withe the REST API backend to display the game. The front end is implemented with Vue, Vuetify and Vuex.
+The Web Application consists of three components. The Domain project contains the core game logic. The Web API utilizes the domain functionality and exposes it with a game session handler through a REST API. The Minesweeper Vue frontend application calls the backend REST API and displays the game to the user.
+
+The application is hosted as a docker container on Azure Web apps. When the master branch is updated on github, a github action workflow is triggered. The workflow builds and tests the code. If the build succeeds, it creates a single container image that contains both the backend API and the frontend Vue app. On completion of the build, the image is pushed to Dockerhub. A web hook on Dockerhub triggers a new deployment on Azure. The Azure Web App deployment will then download the new image and deploy it.
+
+![Minesweeper1](https://user-images.githubusercontent.com/24587666/119646565-99e33500-be1f-11eb-9819-bf294a675222.jpg)
+![Minesweeper2](https://user-images.githubusercontent.com/24587666/119646569-9a7bcb80-be1f-11eb-859b-eb9e68d6cc99.jpg)
 
 ## Minesweeper Console
 
-The **MinesweeperConsole** project is an implementation of a  Console front end that is using the Minesweeper Domain core functionaltiy. Example of the UI:
+The Minesweeper console project is a simple implementation of a console front end. Example of the UI:
 
       ----------------------------------------------------------------
       Minefield: width: 40 height: 15 mines: 40
@@ -46,9 +56,3 @@ The **MinesweeperConsole** project is an implementation of a  Console front end 
       15    1#1   1#1       12#####1           1#
       ----------------------------------------------------------------
       Command: (R)andom (E)xplore (F)lag (U)nflag (Q)uit
-
-## CI/CD
-
-New commits triggers the Github action in the **.github** folder that builds and tests the solution and builds the **Dockerfile** container image and posts it to Docker Hub. A webhook on Docker Hub initializes a new deloyment on Azure Web Apps, that updates the application container image.
-
-Container image on Docker hub: <https://hub.docker.com/r/jonsofteland/minesweeper>

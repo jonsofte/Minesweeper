@@ -5,14 +5,14 @@ using Minesweeper.UnitTests;
 
 namespace MinesweeperTest
 {
-   public class Game_Initializes_completly  
+   public class Game_Initializes_Completely
    {
       private readonly GameFactory _factory;
 
-      public Game_Initializes_completly()
+      public Game_Initializes_Completely()
       {
          ServiceCollection services = new ServiceCollection();
-         services.AddMinefieldGame();
+         services.AddMinefieldTestGame();
          _factory = (GameFactory)ActivatorUtilities.CreateInstance(services.BuildServiceProvider(), typeof(GameFactory));
       }
 

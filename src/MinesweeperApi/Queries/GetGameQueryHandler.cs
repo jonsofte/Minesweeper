@@ -10,22 +10,19 @@ namespace Minesweeper.Api.Queries
 {
    public class GetGameQueryHandler : IRequestHandler<GetGameQuery, Result<MinesweeperApi.Models.Minesweeper>>
    {
-      private readonly ILogger<GetGameQueryHandler> _logger;
       private readonly IDictionary<string, GameSession> _games;
 
       public GetGameQueryHandler(
-         ILogger<GetGameQueryHandler> logger,
          IDictionary<string, GameSession> games
          )
       {
-         _logger = logger;
          _games = games;
       }
-      public async Task<Result<MinesweeperApi.Models.Minesweeper>> Handle(GetGameQuery request, CancellationToken cancellationToken)
+      public Task<Result<MinesweeperApi.Models.Minesweeper>> Handle(GetGameQuery request, CancellationToken cancellationToken)
       {
          return _games.ContainsKey(request.GameID) ?
-            Result.Ok(_games[request.GameID].MapToModel()) :
-            Result.Fail<MinesweeperApi.Models.Minesweeper>("Invalid Game ID");
+            Task.FromResult(Result.Ok(_games[request.GameID].MapToModel())) :
+            Task.FromResult(Result.Fail<MinesweeperApi.Models.Minesweeper>("Invalid Game ID"));
       }
    }
 }

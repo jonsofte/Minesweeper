@@ -5,7 +5,9 @@ namespace Minesweeper.UnitTests
 {
    static class TestsServiceRegistration
    {
-      public static IServiceCollection AddMinefieldGame(this IServiceCollection services)
+      // Service registration for Gamefactory. 
+      // Will create new games with a predictable minefield layout.
+      public static IServiceCollection AddMinefieldTestGame(this IServiceCollection services)
       {
          services.AddSingleton<IMinefieldCreationStrategy, EveryFifthFieldMinefieldCreationStrategy>();
          services.AddSingleton<GameFactory>();

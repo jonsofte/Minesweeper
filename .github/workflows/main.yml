@@ -9,11 +9,14 @@ on:
 jobs:
   build-api:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
     steps:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup dotnet
-      uses: actions/setup-dotnet@v1.7.2
+      uses: actions/setup-dotnet@v1.8.0
     - name: Install dependencies
       run: dotnet restore
     - name: Build
@@ -33,8 +36,10 @@ jobs:
         uses: actions/setup-node@v2
       - name: Installing project dependencies
         run: npm install
+        working-directory: src/MinesweeperVue
       - name: Building the project
         run: npm run build
+        working-directory: src/MinesweeperVue
         
   docker-build-and-publish:
     runs-on: ubuntu-latest

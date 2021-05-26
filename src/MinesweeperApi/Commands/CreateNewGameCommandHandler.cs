@@ -31,16 +31,16 @@ namespace Minesweeper.Api.Commands
          _games = games;
       }
 
-      public async Task<Result<string>> Handle(CreateNewGameCommand request, CancellationToken cancellationToken)
+      public Task<Result<string>> Handle(CreateNewGameCommand request, CancellationToken cancellationToken)
       {
          RemoveOldGamesIfExpired();
 
          var gameSession = new GameSession(game: _gameFactory.CreateNewGame());
          gameSession.StartGame(request.Width, request.Height, request.NumberOfMines);
-          _games.Add(gameSession.Guid.ToString(), gameSession);
+         _games.Add(gameSession.Guid.ToString(), gameSession);
 
          _logger.LogInformation($"Starting new game: ({request.Width}x{request.Height} {request.NumberOfMines} mines)");
-         return Result.Ok<string>(gameSession.Guid.ToString());
+         return Task.FromResult(Result.Ok<string>(gameSession.Guid.ToString()));
       }
 
       private void RemoveOldGamesIfExpired()
