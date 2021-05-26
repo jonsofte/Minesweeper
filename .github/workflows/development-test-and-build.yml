@@ -14,11 +14,11 @@ jobs:
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1.8.0
     - name: Install dependencies
-      run: dotnet restore src
+      run: dotnet restore src/
     - name: Build
-      run: dotnet build --configuration Release --no-restore src
+      run: dotnet build --configuration Release --no-restore src/
     - name: Test
-      run: dotnet test --no-restore --verbosity normal src
+      run: dotnet test --no-restore --verbosity normal src/
   
   build-vue:
     runs-on: ubuntu-latest
