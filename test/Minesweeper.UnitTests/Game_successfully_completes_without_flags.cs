@@ -6,11 +6,11 @@ using Minesweeper.UnitTests;
 
 namespace MinesweeperTest
 {
-    public class Game_successfully_completed_without_flags
+    public class Game_successfully_completes_without_flags
    {
       private readonly GameFactory _factory;
 
-      public Game_successfully_completed_without_flags()
+      public Game_successfully_completes_without_flags()
       {
          ServiceCollection services = new ServiceCollection();
          services.AddMinefieldTestGame();

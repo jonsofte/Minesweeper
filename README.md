@@ -8,11 +8,12 @@ The game is hosted on Azure. It can be played at <https://minesweepervue.azurewe
 
 ## Project structure
 
-- **src/MinesweeperDomain:** The core functionality of the game logic.
-- **src/MinesweeperApi:** Rest API backend that expose game functionality and manage game sessions.
-- **src/MinesweeperConsole:** Console application that handles a single game instance via command line.
+- **src/MinesweeperDomain:** Core minesweeper game logic
+- **src/MinesweeperApi:** Rest API backend that exposes game functionality and manage game sessions.
+- **src/MinesweeperConsole:** Console application that handles a single game instance via the command line interface.
 - **src/MinesweeperVue:** Vue/Vuetify frontend application that uses the backend API to play the game.
-- **test/MinesweeperDomainTest:** Unit tests that verifies that the game logic from the MinesweeperDomain project is correct.
+- **test/Minesweeper.UnitTests:** Tests for the core game logic in the MinesweeperDomain project.
+- **test/Minesweeper.API.IntegrationTests:** Integration tests of REST API Backend in the MinesweeperAPI project.
 - **deployment:** ARM template for deployment to Azure.
 
 ## Minesweeper Web Application
