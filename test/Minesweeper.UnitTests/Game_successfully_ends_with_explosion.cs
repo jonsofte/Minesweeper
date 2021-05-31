@@ -5,11 +5,11 @@ using Minesweeper.UnitTests;
 
 namespace MinesweeperTest
 {
-   public class Game_successfully_ended_with_explosion
+   public class Game_successfully_ends_with_explosion
    {
       private readonly GameFactory _factory;
 
-      public Game_successfully_ended_with_explosion()
+      public Game_successfully_ends_with_explosion()
       {
          ServiceCollection services = new ServiceCollection();
          services.AddMinefieldTestGame();

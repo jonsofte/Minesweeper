@@ -1,4 +1,4 @@
-name: Development branch - Test and build api and vue
+name: Development branch - Build & Test
 
 on:
   push:
