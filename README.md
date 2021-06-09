@@ -20,6 +20,8 @@ The game is hosted on Azure. It can be played at <https://minesweepervue.azurewe
 
 The Web Application is built from three components. The Domain project contains the core game functionality. The API backend component expose games with a session handler through a REST API. The Vue frontend interacts with the backend REST API and enables the user to play the game.
 
+![Minesweeper - Architecture](https://user-images.githubusercontent.com/24587666/121309227-39b1c000-c902-11eb-962b-cd0c140b848d.jpg)
+
 The application is hosted as a Docker container on Azure Web Apps. When a pull request is commited to the master branch on github, a github action will trigger the build and deployment workflow. If all tests are passing and all code compiles successfully, Docker will build a single container image that contains both the backend API and the frontend Vue app. On completion of the image build, the image is pushed to Dockerhub. A Webhook on Dockerhub will trigger a new deployment on Azure. The Azure Web App deployment will then download the new image and deploy it.
 
 Container image on Dockerhub: <https://hub.docker.com/r/jonsofteland/minesweeper>
