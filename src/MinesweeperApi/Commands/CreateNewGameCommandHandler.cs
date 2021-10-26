@@ -45,7 +45,7 @@ namespace Minesweeper.Api.Commands
 
       private void RemoveOldGamesIfExpired()
       {
-         var expireDateTime = DateTime.Now.AddHours(-1 * _gameSettings.MinutesBeforeDeletingOldGames);
+         var expireDateTime = DateTime.Now.AddMinutes(-1 * _gameSettings.MinutesBeforeDeletingOldGames);
          var gamesToRemove = _games
             .Where(x => !x.Value.IsActive && x.Value.GameStartedTime < expireDateTime)
             .Select(s => s.Key)

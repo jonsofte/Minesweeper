@@ -13,7 +13,7 @@ export default new Vuex.Store({
     },
     gameStatus: {
       gameID: null,
-      gameStatus: null,
+      gameStatus: "Uninitialized",
       gameStartedTime: null,
       gameMoves: [],
       numberOfMoves: null,
