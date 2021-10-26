@@ -6,7 +6,8 @@
           <Tile v-for="x in width" :key="x-1" 
               :tileValue="getTile(x,y)" 
               :xValue="x-1" 
-              :yValue="y-1" 
+              :yValue="y-1"
+              :gameIsInitialized="gameIsInitialized"
               @explored="exploreField"
               @flagged="flagField"
               @unflagged="unflagField"
@@ -153,6 +154,9 @@ export default {
         return "BOOM! Game Over!";
       }
       return "";
+    },
+    gameIsInitialized() {
+      return !(this.$store.getters.getGameStatus.gameStatus === "Uninitialized");
     }
   }
 }

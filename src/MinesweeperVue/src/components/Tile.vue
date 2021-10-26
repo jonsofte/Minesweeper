@@ -1,5 +1,5 @@
 <template>
-    <v-btn tile :elevation="getHeight()" @click="explore" @click.right="toggleFlag" :color="tileStates[tileValue].color" small>
+    <v-btn tile :elevation="getHeight()" @click="explore" @click.right="toggleFlag" :color="tileStates[tileValue].color" :disabled="!gameIsInitialized" small>
         <v-icon v-if="tileStates[tileValue].icon">{{tileStates[tileValue].value}}</v-icon>
         <div v-if="!tileStates[tileValue].icon">{{tileStates[tileValue].value}}</div>
     </v-btn>
@@ -20,11 +20,14 @@ export default {
         yValue: {
             type: Number,
             default: 0
+        },
+        gameIsInitialized: {
+            type: Boolean,
+            default: false
         }
 
     },
-    data: function() {
-        return {
+    data: () => ({
             tileStates: [
                 {state: "Hidden", icon: false, value:"", color:"", flat:false},
                 {state: "Empty", icon: false, value:"", color:"blue-grey lighten-4", flat:true},
@@ -40,9 +43,8 @@ export default {
                 {state: "Flagged",icon: true, value:"mdi-flag-variant", color:"green lighten-4", flat:false},
                 {state: "DiscoveredMine",icon: true, value:"mdi-mine", color:"grey lighten-2", flat:true},
                 {state: "MisplacedFlag",icon: true, value:"mdi-flag-variant", color:"red lighten-2", flat:true}
-            ]
-        }
-    },
+            ],
+        }),
     methods: {
         getHeight() {
             return this.tileStates[this.tileValue].flat ? 0 : 1;

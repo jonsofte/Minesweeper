@@ -99,12 +99,6 @@ namespace Minesweeper.Controllers
          {
             return new BadRequestObjectResult(executeActionResponse.Error);
          }
-
-
-         //var result = _gameService.ExecuteAction(gameID, action);
-         //return result.Success ?
-         //   new ActionResult<MinesweeperApi.Models.Minesweeper>(_gameService.GetGame(gameID).Value) :
-         //   new BadRequestObjectResult(result.Error);
       }
    }
 }
